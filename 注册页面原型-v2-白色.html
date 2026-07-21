@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSX 注册原型 v2 · 极简高对比 · 白色版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-en: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-cn: 'PingFang SC', 'Noto Sans SC', 'Hiragino Sans GB', sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+
+    /* ── Neutral surfaces ── */
+    --bg: #ffffff;
+    --surface: #f5f5f6;
+    --surface-2: #ececee;
+    --surface-hover: #e5e5e8;
+    --border: rgba(9,9,11,.09);
+    --border-strong: rgba(9,9,11,.16);
+    --border-focus: rgba(9,9,11,.55);
+
+    /* ── Text ── */
+    --text: #0a0a0b;
+    --text-secondary: rgba(9,9,11,.58);
+    --text-muted: rgba(9,9,11,.34);
+    --text-faint: rgba(9,9,11,.16);
+
+    /* ── Single accent: black ── */
+    --accent: #0a0a0b;
+    --accent-text: #ffffff;
+
+    /* ── Semantic (used sparingly) ── */
+    --danger: #e0342a;
+    --danger-bg: rgba(224,52,42,.07);
+    --danger-border: rgba(224,52,42,.35);
+    --success: #17a06c;
+    --success-bg: rgba(23,160,108,.08);
+    --success-border: rgba(23,160,108,.38);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    font-family: var(--font-en); color: var(--text); background: var(--bg);
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .cn { font-family: var(--font-cn); }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+  /* ---------- Background: flat + hairline grid, no orbs/blur ---------- */
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(9,9,11,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(9,9,11,.035) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+
+  /* ---------- Gallery header ---------- */
+  .hero { position: relative; z-index: 1; padding: 72px 24px 20px; text-align: center; }
+  .hero .eyebrow {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: var(--font-cn); font-size: 30px; font-weight: 700;
+    letter-spacing: -.5px; color: var(--text); margin-bottom: 10px;
+  }
+  .hero p { font-size: 14px; color: var(--text-secondary); }
+  .hero .rule { width: 40px; height: 1px; background: var(--border-strong); margin: 28px auto 0; }
+
+  /* ---------- Section group ---------- */
+  .group { position: relative; z-index: 1; padding: 56px 24px 8px; max-width: 1400px; margin: 0 auto; }
+  .group-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 28px; padding: 0 4px; }
+  .group-num {
+    font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); font-weight: 500;
+  }
+  .group-title {
+    font-family: var(--font-cn); font-size: 15px; font-weight: 600; color: var(--text);
+  }
+  .group-line { flex: 1; height: 1px; background: var(--border); }
+  .phones { display: flex; gap: 28px; flex-wrap: wrap; justify-content: flex-start; }
+
+  /* ---------- Phone frame ---------- */
+  .phone-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .phone {
+    width: 366px; height: 792px;
+    background: var(--bg);
+    border-radius: 30px;
+    border: 1px solid var(--border-strong);
+    box-shadow: 0 24px 60px rgba(9,9,11,.16);
+    overflow: hidden; position: relative;
+    zoom: 0.86; flex-shrink: 0;
+  }
+  .phone .notch {
+    position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
+    width: 108px; height: 26px; background: #000; border-radius: 16px; z-index: 70;
+    pointer-events: none; border: 1px solid rgba(255,255,255,.06);
+  }
+  .phone .status-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 46px; z-index: 60;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 0 26px 11px; color: var(--text); font-size: 14px; font-weight: 600;
+    font-family: var(--font-mono); pointer-events: none;
+  }
+  .scroll { height: 100%; overflow-y: auto; padding-top: 46px; padding-bottom: 32px; }
+  .scroll::-webkit-scrollbar { display: none; }
+
+  /* ---------- In-phone header ---------- */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px 12px;
+    position: sticky; top: 0; z-index: 50; background: var(--bg);
+  }
+  .logo { display: flex; align-items: center; gap: 8px; }
+  .logo .mark {
+    width: 26px; height: 26px; border-radius: 7px;
+    border: 1px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--text);
+  }
+  .logo span { font-family: var(--font-mono); font-size: 15px; font-weight: 700; letter-spacing: .5px; }
+  .header-actions { display: flex; gap: 6px; }
+  .icon-btn {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: transparent; cursor: default;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+  }
+
+  /* ---------- Main ---------- */
+  main { padding: 20px 20px 40px; position: relative; }
+  .title { font-family: var(--font-cn); font-size: 23px; font-weight: 700; margin-bottom: 20px; letter-spacing: -.3px; color: var(--text); }
+
+  /* ---------- Tabs ---------- */
+  .tabs { display: flex; gap: 22px; margin-bottom: 0; }
+  .tab {
+    font-family: var(--font-cn); font-size: 14px; font-weight: 500;
+    color: var(--text-muted);
+    padding-bottom: 11px; position: relative;
+  }
+  .tab.active { color: var(--text); }
+  .tab.active::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: var(--accent); border-radius: 1px;
+  }
+  .tabs-bar { height: 1px; background: var(--border); margin-bottom: 22px; }
+
+  /* ---------- Field / Input ---------- */
+  .field { margin-bottom: 10px; }
+  .input {
+    display: flex; align-items: center; height: 46px; padding: 0 13px;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    transition: border-color .15s;
+  }
+  .input:focus-within { border-color: var(--border-focus); }
+  .input.err { border-color: var(--danger-border); background: var(--danger-bg); }
+  .input.ok { border-color: var(--success-border); }
+  .input input {
+    flex: 1; border: none; background: none; height: 100%;
+    font-size: 14px; color: var(--text); outline: none; font-family: var(--font-en);
+  }
+  .input input::placeholder { color: var(--text-muted); }
+  .input input.mono { font-family: var(--font-mono); letter-spacing: .6px; }
+  .input .suffix { display: flex; align-items: center; cursor: default; padding: 5px; color: var(--text-muted); }
+  .suffix-code {
+    font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+    color: var(--text); white-space: nowrap; cursor: default;
+  }
+  .suffix-code.dim { color: var(--text-muted); }
+
+  .field-err {
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--font-cn); font-size: 12px; color: var(--danger);
+    margin-top: 7px; padding-left: 1px;
+  }
+  .field-ok {
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--font-cn); font-size: 12px; color: var(--success);
+    margin-top: 7px; padding-left: 1px;
+  }
+
+  /* ---------- Password hint ---------- */
+  .pwd-hint {
+    margin-top: 10px; padding: 11px 13px;
+    background: var(--surface);
+    border-radius: 9px; border: 1px solid var(--border);
+    font-family: var(--font-cn); font-size: 12px; color: var(--text-muted); line-height: 1.85;
+  }
+  .pwd-hint .rule { display: flex; align-items: center; gap: 7px; }
+  .pwd-hint .rule .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; background: var(--text-faint); }
+  .pwd-hint .rule.pass .dot { background: var(--success); }
+  .pwd-hint .rule.pass { color: var(--success); }
+  .pwd-hint .rule.fail .dot { background: var(--danger); }
+  .pwd-hint .rule.fail { color: var(--danger); }
+
+  .area-code {
+    font-family: var(--font-mono); font-size: 13px; font-weight: 600;
+    color: var(--text); white-space: nowrap; flex-shrink: 0;
+    padding-right: 2px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .field-sep { width: 1px; height: 18px; background: var(--border-strong); margin: 0 10px; flex-shrink: 0; }
+
+  /* ---------- Toggle / collapsible ---------- */
+  .toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 1px;
+  }
+  .toggle-label { font-family: var(--font-cn); font-size: 13px; color: var(--text-secondary); }
+  .toggle-chevron { display: flex; align-items: center; color: var(--text-muted); transition: transform .15s; }
+  .toggle-chevron.open { transform: rotate(180deg); }
+  .toggle-panel { display: none; }
+  .toggle-panel.open { display: block; }
+
+  .tag-auto {
+    font-family: var(--font-cn); font-size: 10.5px; font-weight: 500;
+    padding: 2px 8px; border-radius: 100px;
+    border: 1px solid var(--border-strong); color: var(--text-secondary);
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .tag-auto .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--success); }
+
+  /* ---------- Back link ---------- */
+  .back-link {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-cn); font-size: 13px; color: var(--text-muted);
+    margin-bottom: 22px; cursor: default;
+  }
+
+  /* ---------- Hint ---------- */
+  .verify-hint {
+    font-family: var(--font-cn); font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;
+  }
+  .verify-hint strong { color: var(--text); font-weight: 600; font-family: var(--font-mono); }
+
+  /* ---------- Banner / Alert ---------- */
+  .banner {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 13px; border-radius: 10px; margin-bottom: 18px;
+    font-family: var(--font-cn); font-size: 12.5px; line-height: 1.6;
+    border: 1px solid var(--border);
+  }
+  .banner svg { flex-shrink: 0; margin-top: 1px; }
+  .banner-neutral { background: var(--surface); color: var(--text-secondary); }
+  .banner-danger { background: var(--danger-bg); border-color: var(--danger-border); color: #b3261e; }
+  .banner-danger svg { color: var(--danger); }
+  .banner-neutral svg { color: var(--text-muted); }
+  .banner a, .banner .link-inline {
+    color: var(--text); text-decoration: underline; text-underline-offset: 2px;
+    font-weight: 500; cursor: default; white-space: nowrap;
+  }
+
+  /* ---------- Checkbox ---------- */
+  .agreement { display: flex; align-items: flex-start; gap: 9px; margin: 22px 0 20px; }
+  .agreement input[type="checkbox"] {
+    appearance: none; -webkit-appearance: none;
+    width: 17px; height: 17px; min-width: 17px; border-radius: 5px;
+    border: 1px solid var(--border-strong); background: var(--surface);
+    cursor: default; position: relative; margin-top: 1px;
+  }
+  .agreement input[type="checkbox"]:checked {
+    background: var(--accent); border-color: var(--accent);
+  }
+  .agreement input[type="checkbox"]:checked::after {
+    content: ''; position: absolute; left: 5px; top: 2px;
+    width: 4px; height: 8px; border: solid var(--accent-text); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .agreement label { font-family: var(--font-cn); font-size: 12px; color: var(--text-muted); line-height: 1.7; cursor: default; }
+  .agreement a { color: var(--text-secondary); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ---------- Button ---------- */
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    width: 100%; height: 46px; border-radius: 10px;
+    font-family: var(--font-cn); font-size: 14.5px; font-weight: 600;
+    cursor: default; transition: opacity .15s, background .15s;
+    border: 1px solid transparent;
+  }
+  .btn-primary { background: var(--accent); color: var(--accent-text); }
+  .btn-primary:hover { opacity: .88; }
+  .btn-primary:active { opacity: .76; }
+  .btn-primary:disabled, .btn-primary.disabled {
+    background: var(--surface-2); color: var(--text-faint); border-color: var(--border);
+  }
+  .btn-secondary { background: transparent; color: var(--text-secondary); border-color: var(--border-strong); }
+  .btn-ghost { background: transparent; color: var(--text-muted); height: auto; padding: 6px; }
+
+  /* ---------- Footer ---------- */
+  .login-tip { font-family: var(--font-cn); text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-muted); }
+  .login-tip a { color: var(--text); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }
+
+  /* ---------- Card number input ---------- */
+  .card-hint {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 13px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border);
+    margin-bottom: 22px; font-family: var(--font-cn); font-size: 12.5px; color: var(--text-secondary); line-height: 1.65;
+  }
+  .card-hint svg { flex-shrink: 0; margin-top: 2px; color: var(--text-muted); }
+  .card-icon-row { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+  .card-chip {
+    width: 60px; height: 44px; border-radius: 8px; border: 1px solid var(--border-strong);
+    background: linear-gradient(155deg, #f5f5f6, #e5e5e8);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .card-chip svg { color: var(--text-muted); }
+
+  /* ---------- In-phone modal (popup) ---------- */
+  .phone-modal-mask {
+    position: absolute; inset: 0; z-index: 150;
+    background: rgba(9,9,11,.45);
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 22px;
+  }
+  .phone-modal {
+    width: 100%; max-width: 320px;
+    background: #ffffff;
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    padding: 20px 18px 18px;
+    box-shadow: 0 30px 90px rgba(9,9,11,.22);
+  }
+  .phone-modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
+  .phone-modal-title { font-family: var(--font-cn); font-size: 15px; font-weight: 700; color: var(--text); }
+  .phone-modal-close {
+    width: 24px; height: 24px; border-radius: 7px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: default;
+  }
+
+  /* ---------- Captcha: puzzle image ---------- */
+  .captcha-box { padding: 4px 0 6px; }
+  .captcha-title { font-family: var(--font-cn); font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; text-align: center; }
+  .captcha-image {
+    position: relative; width: 100%; height: 148px;
+    border-radius: 10px; overflow: hidden; border: 1px solid var(--border);
+    margin-bottom: 12px; background: #eef0f4;
+  }
+  .captcha-scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .captcha-img-refresh {
+    position: absolute; top: 8px; right: 8px; z-index: 6;
+    width: 26px; height: 26px; border-radius: 7px;
+    background: rgba(10,10,11,.55); border: 1px solid rgba(255,255,255,.14);
+    display: flex; align-items: center; justify-content: center; color: #fff;
+    cursor: default;
+  }
+  .captcha-piece-hole { position: absolute; top: 54px; z-index: 3; pointer-events: none; left: 176px; }
+  .captcha-piece {
+    position: absolute; top: 54px; z-index: 5; left: 14px;
+    filter: drop-shadow(0 6px 12px rgba(9,9,11,.28));
+    transition: filter .2s;
+  }
+  .captcha-image.done .captcha-piece { filter: drop-shadow(0 0 0 transparent); }
+  .captcha-image.done .captcha-piece-hole { opacity: 0; }
+
+  /* ---------- Captcha slider ---------- */
+  .captcha-track {
+    position: relative; height: 48px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    overflow: hidden; user-select: none; touch-action: none;
+  }
+  .captcha-track.done { border-color: var(--success-border); }
+  .captcha-fill {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 0;
+    background: var(--surface-2); transition: none;
+  }
+  .captcha-track.done .captcha-fill { background: var(--success-bg); }
+  .captcha-track-label {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-cn); font-size: 13px; color: var(--text-muted); pointer-events: none; z-index: 1;
+  }
+  .captcha-track.done .captcha-track-label { color: var(--success); font-weight: 500; }
+  .captcha-handle {
+    position: absolute; left: 3px; top: 3px; width: 42px; height: 42px;
+    border-radius: 8px; background: var(--accent); color: var(--accent-text);
+    display: flex; align-items: center; justify-content: center;
+    cursor: grab; z-index: 2; box-shadow: 0 4px 14px rgba(9,9,11,.22);
+  }
+  .captcha-handle:active { cursor: grabbing; }
+  .captcha-track.done .captcha-handle { background: var(--success); color: #eafff4; }
+  .captcha-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+  .captcha-foot span { font-family: var(--font-cn); font-size: 11.5px; color: var(--text-faint); }
+  .captcha-refresh { display: flex; align-items: center; gap: 4px; color: var(--text-muted); cursor: default; }
+
+  /* ---------- Phone label / caption ---------- */
+  .phone-label { display: flex; align-items: center; gap: 8px; padding-left: 2px; }
+  .phone-label .idx {
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-faint);
+    border: 1px solid var(--border); border-radius: 5px; padding: 1px 6px;
+  }
+  .phone-label .txt { font-family: var(--font-cn); font-size: 12.5px; font-weight: 500; color: var(--text-secondary); }
+  .phone-label .txt.warn { color: var(--danger); }
+
+  footer.gallery-foot {
+    position: relative; z-index: 1; text-align: center; padding: 60px 24px 80px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); letter-spacing: .5px;
+  }
+
+  @media (max-width: 1000px) { .phones { justify-content: center; } }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<div class="hero">
+  <div class="eyebrow cn">REGISTRATION FLOW · V2 · WHITE</div>
+  <h1 class="cn">MSX 注册原型 · 白色版</h1>
+  <div class="rule"></div>
+</div>
+
+<!-- ══════════════ GROUP 1 · 信息填写与校验 ══════════════ -->
+<div class="group">
+  <div class="group-head">
+    <span class="group-num mono">01</span>
+    <span class="group-title cn">信息填写与校验</span>
+    <span class="group-line"></span>
+  </div>
+  <div class="phones">
+
+    <!-- 1. 填写信息 · 邀请码本地预填 -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header">
+            <div class="logo"><div class="mark">M</div><span>MSX</span></div>
+            <div class="header-actions">
+              <div class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            </div>
+          </div>
+          <main>
+            <h1 class="title cn">创建账号</h1>
+
+            <div class="field">
+              <div class="input"><input type="email" placeholder="请输入邮箱地址"></div>
+            </div>
+            <div class="field">
+              <div class="input">
+                <input type="password" class="cn" placeholder="设置登录密码" onfocus="this.closest('.field').querySelector('.pwd-hint').style.display='block'" onblur="this.closest('.field').querySelector('.pwd-hint').style.display='none'" oninput="checkPwd(this)">
+                <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+              </div>
+              <div class="pwd-hint cn" style="display:none">
+                <div class="rule" data-rule="len"><span class="dot"></span> 至少 8 个字符</div>
+                <div class="rule" data-rule="upper"><span class="dot"></span> 包含大写字母</div>
+                <div class="rule" data-rule="digit"><span class="dot"></span> 包含数字</div>
+                <div class="rule" data-rule="special"><span class="dot"></span> 包含特殊字符</div>
+              </div>
+            </div>
+
+            <div class="toggle-row">
+              <span class="toggle-label cn">邀请码/卡号</span>
+              <span class="tag-auto cn"><span class="dot"></span>已自动识别</span>
+            </div>
+            <div class="toggle-panel open">
+              <div class="field">
+                <div class="input ok">
+                  <input type="text" class="mono" value="MSX7K2Q" readonly>
+                  <span class="suffix" style="cursor:pointer" onclick="clearInviteCode(this)" title="清空后可重新输入">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </span>
+                </div>
+                <div class="field-ok cn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  已从邀请链接识别，来自本地检测 · 点击右侧图标可清空重填
+                </div>
+              </div>
+            </div>
+
+            <div class="agreement">
+              <input type="checkbox" checked>
+              <label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label>
+            </div>
+
+            <button type="button" class="btn btn-primary cn">继续</button>
+            <p class="login-tip cn">已有账号？<a href="#">登录</a></p>
+          </main>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">01</span><span class="txt cn">填写信息 · 邀请码本地预填</span></div>
+    </div>
+
+    <!-- 2. 填写信息 · 校验错误态 -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header">
+            <div class="logo"><div class="mark">M</div><span>MSX</span></div>
+            <div class="header-actions">
+              <div class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            </div>
+          </div>
+          <main>
+            <h1 class="title cn">创建账号</h1>
+
+            <div class="field">
+              <div class="input err"><input type="email" value="user@wrong"></div>
+              <div class="field-err cn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                邮箱格式不正确
+              </div>
+            </div>
+            <div class="field">
+              <div class="input err"><input type="password" value="abc" class="cn">
+                <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+              </div>
+              <div class="pwd-hint cn" style="display:block">
+                <div class="rule fail" data-rule="len"><span class="dot"></span> 至少 8 个字符</div>
+                <div class="rule fail" data-rule="upper"><span class="dot"></span> 包含大写字母</div>
+                <div class="rule fail" data-rule="digit"><span class="dot"></span> 包含数字</div>
+                <div class="rule fail" data-rule="special"><span class="dot"></span> 包含特殊字符</div>
+              </div>
+            </div>
+
+            <div class="toggle-row">
+              <span class="toggle-label cn">邀请码/卡号（选填）</span>
+              <span class="toggle-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+            </div>
+
+            <div class="agreement">
+              <input type="checkbox" checked>
+              <label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label>
+            </div>
+
+            <button type="button" class="btn btn-primary disabled cn">继续</button>
+            <p class="login-tip cn">已有账号？<a href="#">登录</a></p>
+          </main>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">02</span><span class="txt cn warn">格式校验未通过</span></div>
+    </div>
+
+    <!-- 3. 未勾选用户协议 · 弹窗引导确认 -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header">
+            <div class="logo"><div class="mark">M</div><span>MSX</span></div>
+            <div class="header-actions">
+              <div class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            </div>
+          </div>
+          <main>
+            <h1 class="title cn">创建账号</h1>
+
+            <div class="field"><div class="input"><input type="email" value="kayson@msx.com"></div></div>
+            <div class="field"><div class="input"><input type="password" value="••••••••" class="cn">
+              <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            </div></div>
+
+            <div class="toggle-row"><span class="toggle-label cn">邀请码/卡号（选填）</span>
+              <span class="toggle-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+            </div>
+
+            <div class="agreement">
+              <input type="checkbox">
+              <label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label>
+            </div>
+
+            <button type="button" class="btn btn-primary cn">继续</button>
+            <p class="login-tip cn">已有账号？<a href="#">登录</a></p>
+          </main>
+        </div>
+
+        <!-- 弹窗：未同意协议 -->
+        <div class="phone-modal-mask">
+          <div class="phone-modal">
+            <div class="phone-modal-head">
+              <span class="phone-modal-title cn">请同意用户协议</span>
+              <span class="phone-modal-close">✕</span>
+            </div>
+            <p class="verify-hint cn" style="margin-bottom:18px">继续注册前，需先阅读并同意以下协议</p>
+
+            <div class="agreement" style="margin:4px 0 22px">
+              <input type="checkbox">
+              <label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label>
+            </div>
+
+            <button type="button" class="btn btn-primary cn">确认</button>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">03</span><span class="txt cn warn">未勾选协议 · 弹窗引导</span></div>
+    </div>
+
+    <!-- 4. 人机校验 · 弹窗 -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header">
+            <div class="logo"><div class="mark">M</div><span>MSX</span></div>
+            <div class="header-actions">
+              <div class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            </div>
+          </div>
+          <main>
+            <h1 class="title cn">创建账号</h1>
+
+            <div class="field"><div class="input"><input type="email" value="kayson@msx.com"></div></div>
+            <div class="field"><div class="input"><input type="password" value="••••••••" class="cn">
+              <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            </div></div>
+
+            <div class="toggle-row">
+              <span class="toggle-label cn">邀请码/卡号</span>
+              <span class="tag-auto cn"><span class="dot"></span>已自动识别</span>
+            </div>
+            <div class="toggle-panel open">
+              <div class="field">
+                <div class="input ok">
+                  <input type="text" class="mono" value="MSX7K2Q" readonly>
+                  <span class="suffix" style="cursor:pointer" onclick="clearInviteCode(this)" title="清空后可重新输入">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="agreement"><input type="checkbox" checked><label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label></div>
+            <button type="button" class="btn btn-primary cn">继续</button>
+            <p class="login-tip cn">已有账号？<a href="#">登录</a></p>
+          </main>
+        </div>
+
+        <!-- 弹窗：人机校验 -->
+        <div class="phone-modal-mask">
+          <div class="phone-modal">
+            <div class="phone-modal-head">
+              <span class="phone-modal-title cn">安全验证</span>
+              <span class="phone-modal-close">✕</span>
+            </div>
+            <p class="verify-hint cn" style="margin-bottom:16px">为保护账户安全，请完成下方拼图验证</p>
+
+            <div class="captcha-box">
+              <div class="captcha-image" id="captcha-img-1">
+                <svg class="captcha-scene" viewBox="0 0 284 148" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="284" height="148" fill="#eef0f4"/>
+                  <circle cx="232" cy="34" r="15" fill="rgba(9,9,11,.06)"/>
+                  <polygon points="0,148 55,58 105,108 148,48 195,102 236,66 284,104 284,148" fill="#dde1e7"/>
+                  <polygon points="0,148 88,92 158,128 224,86 284,122 284,148" fill="#c7ccd4"/>
+                </svg>
+                <div class="captcha-img-refresh" onclick="resetCaptcha(document.getElementById('captcha-1'))">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                </div>
+                <svg class="captcha-piece-hole" width="40" height="40" viewBox="0 0 48 48">
+                  <path d="M10,8 L38,8 L38,17 C46,17 46,31 38,31 L38,40 L10,40 L10,31 C18,31 18,17 10,17 Z" fill="rgba(9,9,11,.08)" stroke="rgba(9,9,11,.45)" stroke-width="1.5" stroke-dasharray="3,3"/>
+                </svg>
+                <svg class="captcha-piece" id="captcha-piece-1" width="40" height="40" viewBox="0 0 48 48">
+                  <path d="M10,8 L38,8 L38,17 C46,17 46,31 38,31 L38,40 L10,40 L10,31 C18,31 18,17 10,17 Z" fill="#0a0a0b"/>
+                </svg>
+              </div>
+
+              <div class="captcha-track" id="captcha-1" data-piece="captcha-piece-1" data-hole-left="176" data-piece-start="14">
+                <div class="captcha-fill"></div>
+                <div class="captcha-track-label cn">拖动滑块完成拼图</div>
+                <div class="captcha-handle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="7 18 13 12 7 6"/><polyline points="13 18 19 12 13 6"/></svg></div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary disabled cn" id="captcha-btn-1" style="margin-top:16px">确认</button>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">04</span><span class="txt cn">人机校验 · 弹窗 · 可拖动</span></div>
+    </div>
+
+    <!-- 4. 已注册 → 引导登录 -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header">
+            <div class="logo"><div class="mark">M</div><span>MSX</span></div>
+            <div class="header-actions">
+              <div class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            </div>
+          </div>
+          <main>
+            <h1 class="title cn">创建账号</h1>
+
+            <div class="field">
+              <div class="input"><input type="email" value="kayson@msx.com"></div>
+            </div>
+
+            <div class="banner banner-neutral cn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <div>该邮箱已注册账号，<span class="link-inline">直接登录 →</span></div>
+            </div>
+
+            <div class="field" style="opacity:.4;pointer-events:none">
+              <div class="input"><input type="password" placeholder="设置登录密码" class="cn"></div>
+            </div>
+
+            <button type="button" class="btn btn-secondary cn" style="margin-top:14px">前往登录</button>
+          </main>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">05</span><span class="txt cn">邮箱已注册 · 引导登录</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ GROUP 2 · 邀请码与绑卡 ══════════════ -->
+<div class="group">
+  <div class="group-head">
+    <span class="group-num mono">02</span>
+    <span class="group-title cn">邀请码校验与绑卡分支</span>
+    <span class="group-line"></span>
+  </div>
+  <div class="phones">
+
+    <!-- 5. 邀请码不存在 -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <h1 class="title cn">创建账号</h1>
+
+            <div class="field"><div class="input"><input type="email" value="user@example.com"></div></div>
+            <div class="field"><div class="input"><input type="password" value="••••••••" class="cn">
+              <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            </div></div>
+
+            <div class="toggle-row"><span class="toggle-label cn">邀请码/卡号</span></div>
+            <div class="toggle-panel open">
+              <div class="field">
+                <div class="input err"><input type="text" class="mono" value="MSXZZZZZ"></div>
+                <div class="field-err cn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  邀请码/卡号不存在，请检查后重试
+                </div>
+              </div>
+            </div>
+
+            <div class="agreement"><input type="checkbox" checked><label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label></div>
+            <button type="button" class="btn btn-primary cn">继续</button>
+            <p class="login-tip cn">已有账号？<a href="#">登录</a></p>
+          </main>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">06</span><span class="txt cn warn">邀请码不存在</span></div>
+    </div>
+
+    <!-- 6. 绑卡页 -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回修改</div>
+            <h1 class="title cn" style="font-size:21px">绑定U卡</h1>
+
+            <div class="card-hint cn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <div>此邀请码为 <strong style="color:var(--text)">U卡专属邀请码</strong>，需关联U卡卡号才能完成注册</div>
+            </div>
+
+            <div class="card-icon-row">
+              <div class="card-chip"><svg width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <div class="cn" style="font-size:12px;color:var(--text-muted)">支持银卡 / 金卡 / 黑卡</div>
+            </div>
+
+            <div class="field">
+              <div class="input"><input type="text" class="mono" placeholder="请输入卡号"></div>
+            </div>
+
+            <button type="button" class="btn btn-primary cn" style="margin-top:12px">确认</button>
+          </main>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">07</span><span class="txt cn">邀请码需绑卡 · 绑卡页</span></div>
+    </div>
+
+    <!-- 7. 绑卡校验失败 -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回修改</div>
+            <h1 class="title cn" style="font-size:21px">绑定U卡</h1>
+
+            <div class="card-hint cn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <div>此邀请码为 <strong style="color:var(--text)">U卡专属邀请码</strong>，需关联U卡卡号才能完成注册</div>
+            </div>
+
+            <div class="card-icon-row">
+              <div class="card-chip"><svg width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <div class="cn" style="font-size:12px;color:var(--text-muted)">支持银卡 / 金卡 / 黑卡</div>
+            </div>
+
+            <div class="field">
+              <div class="input err"><input type="text" class="mono" value="8842 1195 0031"></div>
+              <div class="field-err cn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                卡号不存在，或已被其他账号绑定
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary disabled cn" style="margin-top:12px">确认</button>
+          </main>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">08</span><span class="txt cn warn">卡号校验失败</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ GROUP 3 · 验证码 ══════════════ -->
+<div class="group" style="padding-bottom: 20px;">
+  <div class="group-head">
+    <span class="group-num mono">03</span>
+    <span class="group-title cn">验证码</span>
+    <span class="group-line"></span>
+  </div>
+  <div class="phones">
+
+    <!-- 8. 验证码页 -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回修改</div>
+            <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
+            <p class="verify-hint cn">验证码已发送至 <strong>user@example.com</strong></p>
+
+            <div class="field">
+              <div class="input"><input type="text" class="mono" value="483726" maxlength="6">
+                <span class="suffix-code cn" onclick="startCountdown(this)">获取验证码</span>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary cn">确认</button>
+          </main>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">09</span><span class="txt cn">验证码 · 初始态 · 本地留存预填</span></div>
+    </div>
+
+    <!-- 9. 验证码 · 格式错误 -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回修改</div>
+            <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
+            <p class="verify-hint cn">验证码已发送至 <strong>user@example.com</strong></p>
+
+            <div class="field">
+              <div class="input err"><input type="text" class="mono" value="83A2">
+                <span class="suffix-code dim cn">获取验证码</span>
+              </div>
+              <div class="field-err cn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                请输入 6 位数字验证码
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary disabled cn" style="margin-top:12px">确认</button>
+          </main>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">10</span><span class="txt cn warn">本地格式校验失败</span></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function checkPwd(input) {
+  var v = input.value
+  var hint = input.closest('.field').querySelector('.pwd-hint')
+  if (!hint) return
+  var hasInput = v.length > 0
+  setRule(hint, 'len', v.length >= 8, hasInput)
+  setRule(hint, 'upper', /[A-Z]/.test(v), hasInput)
+  setRule(hint, 'digit', /\d/.test(v), hasInput)
+  setRule(hint, 'special', /[!@#$%^&*(),.?":{}|<>_\-+=~`\[\]\\;'\/]/.test(v), hasInput)
+}
+function setRule(hint, rule, ok, showFail) {
+  var el = hint.querySelector('[data-rule=' + rule + ']')
+  if (!el) return
+  el.classList.remove('pass', 'fail')
+  if (ok) el.classList.add('pass')
+  else if (showFail) el.classList.add('fail')
+}
+
+function clearInviteCode(el) {
+  var wrap = el.closest('.input')
+  var input = wrap.querySelector('input')
+  wrap.classList.remove('ok')
+  input.value = ''
+  input.readOnly = false
+  input.placeholder = '请输入邀请码/卡号'
+  input.focus()
+  var fieldOk = wrap.parentElement.querySelector('.field-ok')
+  if (fieldOk) fieldOk.remove()
+  wrap.removeChild(el)
+}
+
+function startCountdown(el) {
+  if (el._counting) return
+  el._counting = true
+  var s = 60
+  el.classList.add('dim')
+  el.textContent = s + 's 后重新发送'
+  var t = setInterval(function() {
+    s--
+    if (s <= 0) {
+      clearInterval(t); el._counting = false
+      el.classList.remove('dim'); el.textContent = '获取验证码'
+    } else { el.textContent = s + 's 后重新发送' }
+  }, 1000)
+}
+
+/* ---------- Captcha slider (pointer-based drag, synced with puzzle piece) ---------- */
+function initCaptcha(track) {
+  var handle = track.querySelector('.captcha-handle')
+  var fill = track.querySelector('.captcha-fill')
+  var label = track.querySelector('.captcha-track-label')
+  var dragging = false, startX = 0, startLeft = 0
+  var btn = document.getElementById('captcha-btn-1')
+
+  var piece = document.getElementById(track.getAttribute('data-piece'))
+  var pieceStart = parseFloat(track.getAttribute('data-piece-start')) || 0
+  var holeLeft = parseFloat(track.getAttribute('data-hole-left')) || 0
+  var image = piece ? piece.closest('.captcha-image') : null
+
+  function maxX() { return track.clientWidth - handle.offsetWidth - 6 }
+  function movePiece(progress) {
+    if (!piece) return
+    piece.style.left = (pieceStart + progress * (holeLeft - pieceStart)) + 'px'
+  }
+
+  handle.addEventListener('pointerdown', function(e) {
+    if (track.classList.contains('done')) return
+    dragging = true; startX = e.clientX; startLeft = handle.offsetLeft
+    handle.setPointerCapture(e.pointerId)
+  })
+  handle.addEventListener('pointermove', function(e) {
+    if (!dragging) return
+    var dx = e.clientX - startX
+    var x = Math.min(Math.max(startLeft + dx, 3), maxX())
+    handle.style.left = x + 'px'
+    fill.style.width = (x + handle.offsetWidth) + 'px'
+    movePiece(x / maxX())
+  })
+  handle.addEventListener('pointerup', function() {
+    if (!dragging) return
+    dragging = false
+    var x = handle.offsetLeft
+    if (x >= maxX() - 4) {
+      handle.style.left = maxX() + 'px'
+      fill.style.width = '100%'
+      track.classList.add('done')
+      if (image) image.classList.add('done')
+      movePiece(1)
+      label.textContent = '验证通过'
+      if (btn) btn.classList.remove('disabled')
+    } else {
+      handle.style.left = '3px'
+      fill.style.width = '0'
+      movePiece(0)
+    }
+  })
+}
+function resetCaptcha(track) {
+  if (!track) return
+  var handle = track.querySelector('.captcha-handle')
+  var fill = track.querySelector('.captcha-fill')
+  var label = track.querySelector('.captcha-track-label')
+  var piece = document.getElementById(track.getAttribute('data-piece'))
+  var image = piece ? piece.closest('.captcha-image') : null
+  var pieceStart = parseFloat(track.getAttribute('data-piece-start')) || 0
+  var btn = document.getElementById('captcha-btn-1')
+  track.classList.remove('done')
+  if (image) image.classList.remove('done')
+  handle.style.left = '3px'
+  fill.style.width = '0'
+  label.textContent = '拖动滑块完成拼图'
+  if (piece) piece.style.left = pieceStart + 'px'
+  if (btn) btn.classList.add('disabled')
+}
+document.querySelectorAll('.captcha-track').forEach(initCaptcha)
+</script>
+
+</body>
+</html>
