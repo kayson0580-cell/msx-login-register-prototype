@@ -335,11 +335,6 @@
   .web-form .phone-modal-mask { border-radius: 0 0 14px 0; }
   .web-form .phone-modal { max-width: 380px; }
 
-  .web-tabs { display: flex; gap: 24px; margin-bottom: 26px; border-bottom: 1px solid var(--border); max-width: 420px; }
-  .web-tab { font-family: var(--font-cn); font-size: 14px; font-weight: 600; color: var(--text-muted); padding-bottom: 12px; position: relative; }
-  .web-tab.active { color: var(--text); }
-  .web-tab.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--text); }
-
   @media (max-width: 1000px) { .web-wraps { justify-content: center; } }
 </style>
 </head>
@@ -387,17 +382,15 @@
               
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
-        <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
-          <main>
+        <div class="scroll">          <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">找回密码</h1>
-            <p class="verify-hint cn">请输入注册邮箱，验证身份后即可重置密码</p>
-
             <div class="banner banner-neutral cn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <div>登录密码重置后24小时内禁止提币，转汇及充卡</div>
             </div>
+
+            <p class="verify-hint cn">请输入注册邮箱，验证身份后即可重置密码</p>
 
             <div class="field">
               <div class="input"><input type="email" placeholder="请输入注册邮箱"></div>
@@ -438,9 +431,7 @@
               
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
-        <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
-          <main>
+        <div class="scroll">          <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">找回密码</h1>
             <p class="verify-hint cn">请输入注册邮箱，验证身份后即可重置密码</p>
@@ -497,21 +488,18 @@
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">谷歌验证器</span><span class="web-tab cn">邮箱验证</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
-        <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
-          <main>
+        <div class="scroll">          <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">谷歌验证器</h1>
-            <p class="verify-hint cn">打开谷歌验证器 App，输入当前显示的 6 位动态验证码</p>
-
             <div class="banner banner-neutral cn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <div>登录密码重置后24小时内禁止提币，转汇及充卡</div>
             </div>
+
+            <p class="verify-hint cn">打开谷歌验证器 App，输入当前显示的 6 位动态验证码</p>
 
             <div class="field">
               <div class="otp-paste-row">
@@ -563,21 +551,18 @@
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab cn">谷歌验证器</span><span class="web-tab active cn">邮箱验证</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
-        <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
-          <main>
+        <div class="scroll">          <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
-            <p class="verify-hint cn">验证邮箱：<strong>al****@example.com</strong></p>
-
             <div class="banner banner-neutral cn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <div>登录密码重置后24小时内禁止提币，转汇及充卡</div>
             </div>
+
+            <p class="verify-hint cn">验证邮箱：<strong>al****@example.com</strong></p>
 
             <div class="field">
               <div class="input"><input type="text" class="mono" placeholder="6位验证码" maxlength="6">
@@ -618,21 +603,18 @@
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">谷歌验证器</span><span class="web-tab cn">邮箱验证</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
-        <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
-          <main>
+        <div class="scroll">          <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
-            <p class="verify-hint cn">验证邮箱：<strong>al****@example.com</strong></p>
-
             <div class="banner banner-neutral cn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <div>登录密码重置后24小时内禁止提币，转汇及充卡</div>
             </div>
+
+            <p class="verify-hint cn">验证邮箱：<strong>al****@example.com</strong></p>
 
             <div class="field">
               <div class="input err"><input type="text" class="mono" value="192837">
@@ -676,21 +658,18 @@
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">谷歌验证器</span><span class="web-tab cn">邮箱验证</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
-        <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
-          <main>
+        <div class="scroll">          <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">谷歌验证器</h1>
-            <p class="verify-hint cn">打开谷歌验证器 App，输入当前显示的 6 位动态验证码</p>
-
             <div class="banner banner-neutral cn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <div>登录密码重置后24小时内禁止提币，转汇及充卡</div>
             </div>
+
+            <p class="verify-hint cn">打开谷歌验证器 App，输入当前显示的 6 位动态验证码</p>
 
             <div class="field">
               <div class="otp-row mono">
@@ -764,16 +743,14 @@
               
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
-        <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
-          <main>
+        <div class="scroll">          <main>
             <h1 class="title cn" style="font-size:21px">设置新密码</h1>
-            <p class="verify-hint cn">身份验证通过，请设置新的登录密码</p>
-
             <div class="banner banner-neutral cn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <div>登录密码重置后24小时内禁止提币，转汇及充卡</div>
             </div>
+
+            <p class="verify-hint cn">身份验证通过，请设置新的登录密码</p>
 
             <div class="field">
               <div class="input">
@@ -830,16 +807,14 @@
               
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
-        <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
-          <main>
+        <div class="scroll">          <main>
             <h1 class="title cn" style="font-size:21px">设置新密码</h1>
-            <p class="verify-hint cn">身份验证通过，请设置新的登录密码</p>
-
             <div class="banner banner-neutral cn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <div>登录密码重置后24小时内禁止提币，转汇及充卡</div>
             </div>
+
+            <p class="verify-hint cn">身份验证通过，请设置新的登录密码</p>
 
             <div class="field">
               <div class="input"><input type="password" value="••••••••" class="cn">
