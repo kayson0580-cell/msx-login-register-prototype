@@ -275,14 +275,18 @@
   /* ============ WEB (desktop) FRAME ============ */
   .web-wraps { display: flex; gap: 32px; flex-wrap: wrap; justify-content: flex-start; }
   .web-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
-  .web-frame {
-    width: 1040px; height: 640px;
-    background: var(--bg);
+  .web-frame-scale {
+    width: 416px; height: 256px; flex-shrink: 0;
     border-radius: 14px;
     border: 1px solid var(--border-strong);
     box-shadow: 0 24px 60px rgba(9,9,11,.16);
     overflow: hidden; position: relative;
-    zoom: 0.4; flex-shrink: 0;
+  }
+  .web-frame {
+    width: 1040px; height: 640px;
+    background: var(--bg);
+    overflow: hidden; position: relative;
+    transform: scale(0.4); transform-origin: top left;
     display: flex; flex-direction: column;
   }
   .web-chrome {
@@ -357,10 +361,11 @@
   </div>
   <div class="web-wraps">
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -374,8 +379,8 @@
               <div class="stat"><span class="stat-val mono">Instant</span><span class="stat-label cn">新密码即时生效</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
@@ -398,16 +403,18 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">01</span><span class="txt cn">找回密码 · 输入邮箱</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -421,8 +428,8 @@
               <div class="stat"><span class="stat-val mono">Instant</span><span class="stat-label cn">新密码即时生效</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
@@ -445,6 +452,7 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
@@ -462,10 +470,11 @@
   </div>
   <div class="web-wraps">
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -479,8 +488,8 @@
               <div class="stat"><span class="stat-val mono">Instant</span><span class="stat-label cn">新密码即时生效</span></div>
             </div>
           </div>
-          <div class="web-form">
-            <div class="web-tabs"><span class="web-tab active cn">谷歌验证器</span><span class="web-tab cn">邮箱验证</span></div>
+            <div class="web-form">
+              <div class="web-tabs"><span class="web-tab active cn">谷歌验证器</span><span class="web-tab cn">邮箱验证</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
@@ -518,16 +527,18 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">03</span><span class="txt cn">谷歌验证器 · 优先验证方式</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -541,8 +552,8 @@
               <div class="stat"><span class="stat-val mono">Instant</span><span class="stat-label cn">新密码即时生效</span></div>
             </div>
           </div>
-          <div class="web-form">
-            <div class="web-tabs"><span class="web-tab cn">谷歌验证器</span><span class="web-tab active cn">邮箱验证</span></div>
+            <div class="web-form">
+              <div class="web-tabs"><span class="web-tab cn">谷歌验证器</span><span class="web-tab active cn">邮箱验证</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
@@ -569,16 +580,18 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">04</span><span class="txt cn">邮箱验证 · 备用验证方式</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -592,8 +605,8 @@
               <div class="stat"><span class="stat-val mono">Instant</span><span class="stat-label cn">新密码即时生效</span></div>
             </div>
           </div>
-          <div class="web-form">
-            <div class="web-tabs"><span class="web-tab active cn">谷歌验证器</span><span class="web-tab cn">邮箱验证</span></div>
+            <div class="web-form">
+              <div class="web-tabs"><span class="web-tab active cn">谷歌验证器</span><span class="web-tab cn">邮箱验证</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
@@ -623,16 +636,18 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">05</span><span class="txt cn warn">验证码错误</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -646,8 +661,8 @@
               <div class="stat"><span class="stat-val mono">Instant</span><span class="stat-label cn">新密码即时生效</span></div>
             </div>
           </div>
-          <div class="web-form">
-            <div class="web-tabs"><span class="web-tab active cn">谷歌验证器</span><span class="web-tab cn">邮箱验证</span></div>
+            <div class="web-form">
+              <div class="web-tabs"><span class="web-tab active cn">谷歌验证器</span><span class="web-tab cn">邮箱验证</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
@@ -693,6 +708,7 @@
           </div>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
@@ -710,10 +726,11 @@
   </div>
   <div class="web-wraps">
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -727,8 +744,8 @@
               <div class="stat"><span class="stat-val mono">Instant</span><span class="stat-label cn">新密码即时生效</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
         <div class="scroll">
@@ -766,16 +783,18 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">07</span><span class="txt cn">设置新密码 · 验证通过后展示</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -789,8 +808,8 @@
               <div class="stat"><span class="stat-val mono">Instant</span><span class="stat-label cn">新密码即时生效</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
         <div class="scroll">
@@ -824,6 +843,7 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
