@@ -104,7 +104,7 @@
   .scroll::-webkit-scrollbar { display: none; }
 
   .header {
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; align-items: center; justify-content: flex-end;
     padding: 16px 20px 12px;
     position: sticky; top: 0; z-index: 50; background: var(--bg);
   }
@@ -143,7 +143,7 @@
   }
   .otp-box:focus { border-color: var(--border-focus); }
   .input {
-    display: flex; align-items: center; height: 46px; padding: 0 13px;
+    display: flex; align-items: center; height: 40px; padding: 0 13px;
     background: var(--surface);
     border-radius: 10px;
     border: 1px solid var(--border);
@@ -196,7 +196,7 @@
   }
 
   .verify-hint {
-    font-family: var(--font-cn); font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;
+    font-family: var(--font-cn); font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;
   }
   .verify-hint strong { color: var(--text); font-weight: 600; font-family: var(--font-mono); }
 
@@ -218,8 +218,8 @@
 
   .btn {
     display: flex; align-items: center; justify-content: center; gap: 7px;
-    width: 100%; height: 46px; border-radius: 10px;
-    font-family: var(--font-cn); font-size: 14.5px; font-weight: 600;
+    width: 100%; height: 40px; border-radius: 10px;
+    font-family: var(--font-cn); font-size: 14px; font-weight: 600;
     cursor: default; transition: opacity .15s, background .15s;
     border: 1px solid transparent;
   }
@@ -231,6 +231,23 @@
   }
   .btn-secondary { background: transparent; color: var(--text-secondary); border-color: var(--border-strong); }
   .btn-ghost { background: transparent; color: var(--text-muted); height: auto; padding: 6px; }
+
+  .agreement { display: flex; align-items: flex-start; gap: 9px; margin: 22px 0 20px; }
+  .agreement input[type="checkbox"] {
+    appearance: none; -webkit-appearance: none;
+    width: 17px; height: 17px; min-width: 17px; border-radius: 5px;
+    border: 1px solid var(--border-strong); background: var(--surface);
+    cursor: default; position: relative; margin-top: 1px;
+  }
+  .agreement input[type="checkbox"]:checked {
+    background: var(--accent); border-color: var(--accent);
+  }
+  .agreement input[type="checkbox"]:checked::after {
+    content: ''; position: absolute; left: 5px; top: 2px;
+    width: 4px; height: 8px; border: solid var(--accent-text); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .agreement label { font-family: var(--font-cn); font-size: 12px; color: var(--text-muted); line-height: 1.7; cursor: default; }
+  .agreement a { color: var(--text-secondary); text-decoration: underline; text-underline-offset: 2px; }
 
   .login-tip { font-family: var(--font-cn); text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-muted); }
   .login-tip a { color: var(--text); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }
@@ -261,7 +278,7 @@
     box-shadow: 0 30px 90px rgba(9,9,11,.22);
   }
   .phone-modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
-  .phone-modal-title { font-family: var(--font-cn); font-size: 15px; font-weight: 700; color: var(--text); }
+  .phone-modal-title { font-family: var(--font-cn); font-size: 18px; font-weight: 700; color: var(--text); }
   .phone-modal-close {
     width: 24px; height: 24px; border-radius: 7px; border: 1px solid var(--border);
     display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: default;
@@ -400,8 +417,8 @@
   .web-body { flex: 1; display: flex; min-height: 0; }
 
   .web-brand {
-    width: 40%; flex-shrink: 0; background: #0a0a0b; color: #fff; position: relative; overflow: hidden;
-    display: flex; flex-direction: column; justify-content: space-between; padding: 40px 36px;
+    width: 52%; flex-shrink: 0; background: #0a0a0b; color: #fff; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; padding: 40px 36px;
   }
   .web-brand-grid {
     position: absolute; inset: 0; z-index: 0; pointer-events: none;
@@ -418,23 +435,25 @@
     font-family: var(--font-mono); font-weight: 700; font-size: 15px;
   }
   .logo-lg span { font-family: var(--font-mono); font-weight: 700; font-size: 17px; letter-spacing: .5px; }
-  .web-brand-mid { position: relative; z-index: 1; }
-  .web-brand .eyebrow {
-    font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-    color: rgba(255,255,255,.45); margin-bottom: 14px;
+  .web-brand-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 24px; position: relative; z-index: 1; }
+  .ad-banner-ph {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; max-width: 340px; margin: 0 auto;
+    height: 220px; border: 1px dashed rgba(255,255,255,.25); border-radius: 12px;
+    color: rgba(255,255,255,.4);
   }
-  .web-brand h2 { font-family: var(--font-cn); font-size: 25px; font-weight: 700; line-height: 1.45; margin-bottom: 12px; letter-spacing: -.3px; }
-  .web-brand p.desc { font-family: var(--font-cn); font-size: 13.5px; color: rgba(255,255,255,.6); line-height: 1.7; max-width: 320px; }
-  .web-brand-stats { position: relative; z-index: 1; display: flex; gap: 30px; }
+  .ad-banner-ph svg { flex-shrink: 0; }
+  .ad-banner-ph span { font-family: var(--font-cn); font-size: 12.5px; }
+  .web-brand-stats { display: flex; justify-content: space-between; }
   .web-brand-stats .stat { display: flex; flex-direction: column; gap: 5px; }
-  .web-brand-stats .stat-val { font-family: var(--font-mono); font-size: 15px; font-weight: 700; }
+  .web-brand-stats .stat-val { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: #fff; }
   .web-brand-stats .stat-label { font-family: var(--font-cn); font-size: 11.5px; color: rgba(255,255,255,.45); }
 
-  .web-form { flex: 1; min-width: 0; position: relative; overflow-y: auto; padding: 44px 56px; }
+  .web-form { flex: 1; min-width: 0; position: relative; overflow-y: auto; padding: 44px 56px; display: flex; flex-direction: column; justify-content: center; }
   .web-form .scroll { height: auto; overflow: visible; padding-top: 0; padding-bottom: 0; max-width: 420px; }
   .web-form .notch, .web-form .status-bar { display: none; }
   .web-form .phone-modal-mask { border-radius: 0 0 14px 0; }
-  .web-form .phone-modal { max-width: 380px; }
+  .web-form .phone-modal { max-width: 320px; }
 
   .web-tabs { display: flex; gap: 24px; margin-bottom: 26px; border-bottom: 1px solid var(--border); max-width: 420px; }
   .web-tab { font-family: var(--font-cn); font-size: 14px; font-weight: 600; color: var(--text-muted); padding-bottom: 12px; position: relative; }
@@ -478,33 +497,33 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header">
-            <div class="logo"><div class="mark">M</div><span>MSX</span></div>
-            <div class="header-actions">
-              <div class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-            </div>
-          </div>
           <main>
-            <h1 class="title cn">欢迎回来</h1>
+            <h1 class="title cn">登录</h1>
 
             <div class="field">
               <div class="input"><input type="email" placeholder="请输入邮箱地址"></div>
+            </div>
+
+            <div class="agreement">
+              <input type="checkbox" checked>
+              <label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label>
             </div>
 
             <button type="button" class="btn btn-primary cn">继续</button>
@@ -535,30 +554,25 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header">
-            <div class="logo"><div class="mark">M</div><span>MSX</span></div>
-            <div class="header-actions">
-              <div class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-            </div>
-          </div>
           <main>
-            <h1 class="title cn">欢迎回来</h1>
+            <h1 class="title cn">登录</h1>
 
             <div class="field">
               <div class="input err"><input type="email" value="user@wrong"></div>
@@ -566,6 +580,11 @@
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 邮箱格式不正确
               </div>
+            </div>
+
+            <div class="agreement">
+              <input type="checkbox" checked>
+              <label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label>
             </div>
 
             <button type="button" class="btn btn-primary disabled cn" style="margin-top:12px">继续</button>
@@ -596,31 +615,27 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header">
-            <div class="logo"><div class="mark">M</div><span>MSX</span></div>
-            <div class="header-actions">
-              <div class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-            </div>
-          </div>
           <main>
-            <h1 class="title cn">欢迎回来</h1>
+            <h1 class="title cn">登录</h1>
             <div class="field"><div class="input"><input type="email" value="kayson@msx.com"></div></div>
+            <div class="agreement"><input type="checkbox" checked><label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label></div>
             <button type="button" class="btn btn-primary cn">继续</button>
             <div class="divider"><span class="line"></span><span class="cn">或</span><span class="line"></span></div>
             <button type="button" class="btn btn-secondary cn">
@@ -684,25 +699,25 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
-            <h1 class="title cn">欢迎回来</h1>
+            <h1 class="title cn">登录</h1>
 
             <div class="field"><div class="input"><input type="email" value="new@example.com"></div></div>
 
@@ -711,7 +726,21 @@
               <div>该邮箱尚未注册，<span class="link-inline">去注册 →</span></div>
             </div>
 
-            <button type="button" class="btn btn-secondary cn" style="margin-top:14px">前往注册</button>
+            <div class="agreement">
+              <input type="checkbox" checked>
+              <label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label>
+            </div>
+
+            <button type="button" class="btn btn-primary cn">继续</button>
+
+            <div class="divider"><span class="line"></span><span class="cn">或</span><span class="line"></span></div>
+
+            <button type="button" class="btn btn-secondary cn">
+              <span class="wallet-btn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="15" r="1"/></svg></span>
+              使用钱包登录
+            </button>
+
+            <p class="login-tip cn">还没有账号？<a href="#">注册</a></p>
           </main>
         </div>
       
@@ -730,25 +759,25 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
-            <h1 class="title cn">欢迎回来</h1>
+            <h1 class="title cn">登录</h1>
 
             <div class="field">
               <div class="input"><input type="email" value="kayson@msx.com" oninput="hidePwdReveal(this)"></div>
@@ -756,16 +785,30 @@
             <div class="pwd-reveal">
               <div class="field">
                 <div class="input"><input type="password" value="••••••••" class="cn">
-                  <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                  <span class="suffix" style="cursor:pointer" onclick="togglePwd(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
                 </div>
               </div>
               <p class="forgot-tip cn"><a href="#">忘记密码？</a></p>
             </div>
 
+            <div class="agreement">
+              <input type="checkbox" checked>
+              <label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label>
+            </div>
+
             <button type="button" class="btn btn-primary cn">登录</button>
+
+            <div class="divider"><span class="line"></span><span class="cn">或</span><span class="line"></span></div>
+
+            <button type="button" class="btn btn-secondary cn">
+              <span class="wallet-btn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="15" r="1"/></svg></span>
+              使用钱包登录
+            </button>
+
+            <p class="login-tip cn">还没有账号？<a href="#">注册</a></p>
           </main>
         </div>
-      
+
             </div>
           </div>
         </div>
@@ -781,25 +824,25 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
-            <h1 class="title cn">欢迎回来</h1>
+            <h1 class="title cn">登录</h1>
 
             <div class="field">
               <div class="input"><input type="email" value="kayson@msx.com" oninput="hidePwdReveal(this)"></div>
@@ -807,7 +850,7 @@
             <div class="pwd-reveal">
               <div class="field">
                 <div class="input err"><input type="password" value="•••••" class="cn">
-                  <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                  <span class="suffix" style="cursor:pointer" onclick="togglePwd(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
                 </div>
                 <div class="field-err cn">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -817,10 +860,24 @@
               <p class="forgot-tip cn"><a href="#">忘记密码？</a></p>
             </div>
 
+            <div class="agreement">
+              <input type="checkbox" checked>
+              <label>我已阅读并同意 <a href="#">服务条款</a> 和 <a href="#">隐私政策</a></label>
+            </div>
+
             <button type="button" class="btn btn-primary cn">登录</button>
+
+            <div class="divider"><span class="line"></span><span class="cn">或</span><span class="line"></span></div>
+
+            <button type="button" class="btn btn-secondary cn">
+              <span class="wallet-btn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="15" r="1"/></svg></span>
+              使用钱包登录
+            </button>
+
+            <p class="login-tip cn">还没有账号？<a href="#">注册</a></p>
           </main>
         </div>
-      
+
             </div>
           </div>
         </div>
@@ -847,23 +904,23 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
@@ -895,23 +952,23 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
@@ -946,23 +1003,23 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
@@ -1018,23 +1075,23 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">谷歌验证器</h1>
@@ -1077,23 +1134,23 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">谷歌验证器</h1>
@@ -1154,23 +1211,23 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">设置登录密码</h1>
@@ -1179,7 +1236,7 @@
             <div class="field">
               <div class="input">
                 <input type="password" class="cn" placeholder="设置登录密码" onfocus="this.closest('.field').querySelector('.pwd-hint').style.display='block'" onblur="this.closest('.field').querySelector('.pwd-hint').style.display='none'" oninput="checkPwd(this)">
-                <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                <span class="suffix" style="cursor:pointer" onclick="togglePwd(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
               </div>
               <div class="pwd-hint cn" style="display:none">
                 <div class="rule" data-rule="len"><span class="dot"></span> 至少 8 个字符</div>
@@ -1225,25 +1282,25 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:44</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
-            <h1 class="title cn">欢迎回来</h1>
+            <h1 class="title cn">登录</h1>
             <div class="field"><div class="input"><input type="email" placeholder="请输入邮箱地址"></div></div>
             <button type="button" class="btn btn-primary cn">继续</button>
             <div class="divider"><span class="line"></span><span class="cn">或</span><span class="line"></span></div>
@@ -1287,25 +1344,25 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:44</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
-            <h1 class="title cn">欢迎回来</h1>
+            <h1 class="title cn">登录</h1>
             <div class="field"><div class="input"><input type="email" placeholder="请输入邮箱地址"></div></div>
             <button type="button" class="btn btn-primary cn">继续</button>
           </main>
@@ -1340,25 +1397,25 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
-            <h1 class="title cn">欢迎回来</h1>
+            <h1 class="title cn">登录</h1>
             <div class="field"><div class="input"><input type="email" placeholder="请输入邮箱地址"></div></div>
             <button type="button" class="btn btn-primary cn">继续</button>
           </main>
@@ -1407,23 +1464,23 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
             <h1 class="title cn" style="font-size:21px">绑定邮箱</h1>
 
@@ -1440,7 +1497,7 @@
             <div class="field">
               <div class="input">
                 <input type="password" class="cn" placeholder="设置登录密码" onfocus="this.closest('.field').querySelector('.pwd-hint').style.display='block'" onblur="this.closest('.field').querySelector('.pwd-hint').style.display='none'" oninput="checkPwd(this)">
-                <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                <span class="suffix" style="cursor:pointer" onclick="togglePwd(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
               </div>
               <div class="pwd-hint cn" style="display:none">
                 <div class="rule" data-rule="len"><span class="dot"></span> 至少 8 个字符</div>
@@ -1469,23 +1526,23 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
             <h1 class="title cn" style="font-size:21px">绑定邮箱</h1>
 
@@ -1498,7 +1555,7 @@
 
             <div class="field"><div class="input"><input type="email" value="kayson@msx.com"></div></div>
             <div class="field"><div class="input"><input type="password" value="••••••••" class="cn">
-              <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+              <span class="suffix" style="cursor:pointer" onclick="togglePwd(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
             </div></div>
 
             <button type="button" class="btn btn-primary cn" style="margin-top:12px">确认</button>
@@ -1558,23 +1615,23 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
             <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
             <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
@@ -1616,23 +1673,23 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
             <h1 class="title cn" style="font-size:21px">设置登录密码</h1>
 
@@ -1646,7 +1703,7 @@
             <div class="field">
               <div class="input">
                 <input type="password" class="cn" placeholder="设置登录密码" onfocus="this.closest('.field').querySelector('.pwd-hint').style.display='block'" onblur="this.closest('.field').querySelector('.pwd-hint').style.display='none'" oninput="checkPwd(this)">
-                <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                <span class="suffix" style="cursor:pointer" onclick="togglePwd(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
               </div>
               <div class="pwd-hint cn" style="display:none">
                 <div class="rule" data-rule="len"><span class="dot"></span> 至少 8 个字符</div>
@@ -1675,23 +1732,23 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
-              <h2 class="cn">登录后继续你的交易</h2>
-              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
-              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
-              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
-              <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
             
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
         <div class="scroll">
-          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
           <main>
             <h1 class="title cn" style="font-size:21px">设置登录密码</h1>
 
@@ -1703,7 +1760,7 @@
             <p class="verify-hint cn">该钱包已绑定邮箱 <strong>kayson@msx.com</strong>，请设置登录密码</p>
 
             <div class="field"><div class="input"><input type="password" value="••••••••" class="cn">
-              <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+              <span class="suffix" style="cursor:pointer" onclick="togglePwd(this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
             </div></div>
 
             <button type="button" class="btn btn-primary cn" style="margin-top:12px">确认</button>
@@ -1885,6 +1942,10 @@ document.querySelectorAll('.otp-row').forEach(function(row) {
 function hidePwdReveal(el) {
   var block = el.closest('main').querySelector('.pwd-reveal')
   if (block) block.style.display = 'none'
+}
+function togglePwd(el) {
+  var input = el.closest('.input').querySelector('input')
+  input.type = input.type === 'password' ? 'text' : 'password'
 }
 function fillOTP(boxes, text) {
   var digits = (text || '').replace(/[^0-9]/g, '').slice(0, boxes.length)

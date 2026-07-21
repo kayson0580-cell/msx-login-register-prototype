@@ -155,7 +155,7 @@
   /* ---------- Field / Input ---------- */
   .field { margin-bottom: 10px; }
   .input {
-    display: flex; align-items: center; height: 46px; padding: 0 13px;
+    display: flex; align-items: center; height: 40px; padding: 0 13px;
     background: var(--surface);
     border-radius: 10px;
     border: 1px solid var(--border);
@@ -238,7 +238,7 @@
 
   /* ---------- Hint ---------- */
   .verify-hint {
-    font-family: var(--font-cn); font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;
+    font-family: var(--font-cn); font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;
   }
   .verify-hint strong { color: var(--text); font-weight: 600; font-family: var(--font-mono); }
 
@@ -280,8 +280,8 @@
   /* ---------- Button ---------- */
   .btn {
     display: flex; align-items: center; justify-content: center; gap: 7px;
-    width: 100%; height: 46px; border-radius: 10px;
-    font-family: var(--font-cn); font-size: 14.5px; font-weight: 600;
+    width: 100%; height: 40px; border-radius: 10px;
+    font-family: var(--font-cn); font-size: 14px; font-weight: 600;
     cursor: default; transition: opacity .15s, background .15s;
     border: 1px solid transparent;
   }
@@ -329,7 +329,7 @@
     box-shadow: 0 30px 90px rgba(9,9,11,.22);
   }
   .phone-modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
-  .phone-modal-title { font-family: var(--font-cn); font-size: 15px; font-weight: 700; color: var(--text); }
+  .phone-modal-title { font-family: var(--font-cn); font-size: 18px; font-weight: 700; color: var(--text); }
   .phone-modal-close {
     width: 24px; height: 24px; border-radius: 7px; border: 1px solid var(--border);
     display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: default;
@@ -430,8 +430,8 @@
   .web-body { flex: 1; display: flex; min-height: 0; }
 
   .web-brand {
-    width: 40%; flex-shrink: 0; background: #0a0a0b; color: #fff; position: relative; overflow: hidden;
-    display: flex; flex-direction: column; justify-content: space-between; padding: 40px 36px;
+    width: 52%; flex-shrink: 0; background: #0a0a0b; color: #fff; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; padding: 40px 36px;
   }
   .web-brand-grid {
     position: absolute; inset: 0; z-index: 0; pointer-events: none;
@@ -448,16 +448,18 @@
     font-family: var(--font-mono); font-weight: 700; font-size: 15px;
   }
   .logo-lg span { font-family: var(--font-mono); font-weight: 700; font-size: 17px; letter-spacing: .5px; }
-  .web-brand-mid { position: relative; z-index: 1; }
-  .web-brand .eyebrow {
-    font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-    color: rgba(255,255,255,.45); margin-bottom: 14px;
+  .web-brand-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 24px; position: relative; z-index: 1; }
+  .ad-banner-ph {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; max-width: 340px; margin: 0 auto;
+    height: 220px; border: 1px dashed rgba(255,255,255,.25); border-radius: 12px;
+    color: rgba(255,255,255,.4);
   }
-  .web-brand h2 { font-family: var(--font-cn); font-size: 25px; font-weight: 700; line-height: 1.45; margin-bottom: 12px; letter-spacing: -.3px; }
-  .web-brand p.desc { font-family: var(--font-cn); font-size: 13.5px; color: rgba(255,255,255,.6); line-height: 1.7; max-width: 320px; }
-  .web-brand-stats { position: relative; z-index: 1; display: flex; gap: 30px; }
+  .ad-banner-ph svg { flex-shrink: 0; }
+  .ad-banner-ph span { font-family: var(--font-cn); font-size: 12.5px; }
+  .web-brand-stats { display: flex; justify-content: space-between; }
   .web-brand-stats .stat { display: flex; flex-direction: column; gap: 5px; }
-  .web-brand-stats .stat-val { font-family: var(--font-mono); font-size: 15px; font-weight: 700; }
+  .web-brand-stats .stat-val { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: #fff; }
   .web-brand-stats .stat-label { font-family: var(--font-cn); font-size: 11.5px; color: rgba(255,255,255,.45); }
 
   .web-form { flex: 1; min-width: 0; position: relative; overflow-y: auto; padding: 44px 56px; }
@@ -502,14 +504,16 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · CREATE ACCOUNT</div>
-              <h2 class="cn">几步完成注册<br>开启你的交易之旅</h2>
-              <p class="desc cn">邀请码专属权益，人机校验与邮箱验证码双重保护账户安全。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">Invite</span><span class="stat-label cn">邀请权益</span></div>
-              <div class="stat"><span class="stat-val mono">CAPTCHA</span><span class="stat-label cn">人机校验</span></div>
-              <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
@@ -586,14 +590,16 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · CREATE ACCOUNT</div>
-              <h2 class="cn">几步完成注册<br>开启你的交易之旅</h2>
-              <p class="desc cn">邀请码专属权益，人机校验与邮箱验证码双重保护账户安全。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">Invite</span><span class="stat-label cn">邀请权益</span></div>
-              <div class="stat"><span class="stat-val mono">CAPTCHA</span><span class="stat-label cn">人机校验</span></div>
-              <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
@@ -659,14 +665,16 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · CREATE ACCOUNT</div>
-              <h2 class="cn">几步完成注册<br>开启你的交易之旅</h2>
-              <p class="desc cn">邀请码专属权益，人机校验与邮箱验证码双重保护账户安全。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">Invite</span><span class="stat-label cn">邀请权益</span></div>
-              <div class="stat"><span class="stat-val mono">CAPTCHA</span><span class="stat-label cn">人机校验</span></div>
-              <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
@@ -735,14 +743,16 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · CREATE ACCOUNT</div>
-              <h2 class="cn">几步完成注册<br>开启你的交易之旅</h2>
-              <p class="desc cn">邀请码专属权益，人机校验与邮箱验证码双重保护账户安全。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">Invite</span><span class="stat-label cn">邀请权益</span></div>
-              <div class="stat"><span class="stat-val mono">CAPTCHA</span><span class="stat-label cn">人机校验</span></div>
-              <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
@@ -839,14 +849,16 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · CREATE ACCOUNT</div>
-              <h2 class="cn">几步完成注册<br>开启你的交易之旅</h2>
-              <p class="desc cn">邀请码专属权益，人机校验与邮箱验证码双重保护账户安全。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">Invite</span><span class="stat-label cn">邀请权益</span></div>
-              <div class="stat"><span class="stat-val mono">CAPTCHA</span><span class="stat-label cn">人机校验</span></div>
-              <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
@@ -906,14 +918,16 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · CREATE ACCOUNT</div>
-              <h2 class="cn">几步完成注册<br>开启你的交易之旅</h2>
-              <p class="desc cn">邀请码专属权益，人机校验与邮箱验证码双重保护账户安全。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">Invite</span><span class="stat-label cn">邀请权益</span></div>
-              <div class="stat"><span class="stat-val mono">CAPTCHA</span><span class="stat-label cn">人机校验</span></div>
-              <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
@@ -962,14 +976,16 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · CREATE ACCOUNT</div>
-              <h2 class="cn">几步完成注册<br>开启你的交易之旅</h2>
-              <p class="desc cn">邀请码专属权益，人机校验与邮箱验证码双重保护账户安全。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">Invite</span><span class="stat-label cn">邀请权益</span></div>
-              <div class="stat"><span class="stat-val mono">CAPTCHA</span><span class="stat-label cn">人机校验</span></div>
-              <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
@@ -1015,14 +1031,16 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · CREATE ACCOUNT</div>
-              <h2 class="cn">几步完成注册<br>开启你的交易之旅</h2>
-              <p class="desc cn">邀请码专属权益，人机校验与邮箱验证码双重保护账户安全。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">Invite</span><span class="stat-label cn">邀请权益</span></div>
-              <div class="stat"><span class="stat-val mono">CAPTCHA</span><span class="stat-label cn">人机校验</span></div>
-              <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
@@ -1083,14 +1101,16 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · CREATE ACCOUNT</div>
-              <h2 class="cn">几步完成注册<br>开启你的交易之旅</h2>
-              <p class="desc cn">邀请码专属权益，人机校验与邮箱验证码双重保护账户安全。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">Invite</span><span class="stat-label cn">邀请权益</span></div>
-              <div class="stat"><span class="stat-val mono">CAPTCHA</span><span class="stat-label cn">人机校验</span></div>
-              <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
@@ -1129,14 +1149,16 @@
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
-              <div class="eyebrow mono">MSX · CREATE ACCOUNT</div>
-              <h2 class="cn">几步完成注册<br>开启你的交易之旅</h2>
-              <p class="desc cn">邀请码专属权益，人机校验与邮箱验证码双重保护账户安全。</p>
-            </div>
-            <div class="web-brand-stats">
-              <div class="stat"><span class="stat-val mono">Invite</span><span class="stat-label cn">邀请权益</span></div>
-              <div class="stat"><span class="stat-val mono">CAPTCHA</span><span class="stat-label cn">人机校验</span></div>
-              <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
+              <div class="ad-banner-ph">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="cn">Banner 图 主题：加入MSX，即可获取660USDT</span>
+              </div>
+              <div class="web-brand-stats">
+                <div class="stat"><span class="stat-val mono">$109.16M</span><span class="stat-label cn">24H成交量</span></div>
+                <div class="stat"><span class="stat-val mono">$38.07B</span><span class="stat-label cn">RWA交易总量</span></div>
+                <div class="stat"><span class="stat-val mono">300+</span><span class="stat-label cn">RWA代币数量</span></div>
+                <div class="stat"><span class="stat-val mono">226.5K</span><span class="stat-label cn">用户数量</span></div>
+              </div>
             </div>
           </div>
             <div class="web-form">
