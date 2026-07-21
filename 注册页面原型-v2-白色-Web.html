@@ -408,14 +408,18 @@
   /* ============ WEB (desktop) FRAME ============ */
   .web-wraps { display: flex; gap: 32px; flex-wrap: wrap; justify-content: flex-start; }
   .web-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
-  .web-frame {
-    width: 1040px; height: 640px;
-    background: var(--bg);
+  .web-frame-scale {
+    width: 416px; height: 256px; flex-shrink: 0;
     border-radius: 14px;
     border: 1px solid var(--border-strong);
     box-shadow: 0 24px 60px rgba(9,9,11,.16);
     overflow: hidden; position: relative;
-    zoom: 0.4; flex-shrink: 0;
+  }
+  .web-frame {
+    width: 1040px; height: 640px;
+    background: var(--bg);
+    overflow: hidden; position: relative;
+    transform: scale(0.4); transform-origin: top left;
     display: flex; flex-direction: column;
   }
   .web-chrome {
@@ -490,10 +494,11 @@
   </div>
   <div class="web-wraps">
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -507,8 +512,8 @@
               <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
@@ -566,16 +571,18 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">01</span><span class="txt cn">填写信息 · 邀请码本地预填</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -589,8 +596,8 @@
               <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
@@ -637,16 +644,18 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">02</span><span class="txt cn warn">格式校验未通过</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -660,8 +669,8 @@
               <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
@@ -711,16 +720,18 @@
           </div>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">03</span><span class="txt cn warn">未勾选协议 · 弹窗引导</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -734,8 +745,8 @@
               <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
@@ -813,16 +824,18 @@
           </div>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">04</span><span class="txt cn">人机校验 · 弹窗 · 可拖动</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -836,8 +849,8 @@
               <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
@@ -867,6 +880,7 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
@@ -884,10 +898,11 @@
   </div>
   <div class="web-wraps">
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -901,8 +916,8 @@
               <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
         <div class="scroll">
@@ -932,16 +947,18 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">06</span><span class="txt cn warn">邀请码不存在</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -955,8 +972,8 @@
               <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
         <div class="scroll">
@@ -983,16 +1000,18 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">07</span><span class="txt cn">邀请码需绑卡 · 绑卡页</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -1006,8 +1025,8 @@
               <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
         <div class="scroll">
@@ -1038,6 +1057,7 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
@@ -1055,10 +1075,11 @@
   </div>
   <div class="web-wraps">
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -1072,8 +1093,8 @@
               <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
         <div class="scroll">
@@ -1093,16 +1114,18 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
       <div class="phone-label"><span class="idx">09</span><span class="txt cn">验证码 · 初始态 · 本地留存预填</span></div>
     </div>
     <div class="web-wrap">
-      <div class="web-frame">
-        <div class="web-chrome"><span></span><span></span><span></span></div>
-        <div class="web-body">
-          <div class="web-brand">
+      <div class="web-frame-scale">
+        <div class="web-frame">
+          <div class="web-chrome"><span></span><span></span><span></span></div>
+          <div class="web-body">
+            <div class="web-brand">
             <div class="web-brand-grid"></div>
             <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
             <div class="web-brand-mid">
@@ -1116,8 +1139,8 @@
               <div class="stat"><span class="stat-val mono">OTP</span><span class="stat-label cn">邮箱验证</span></div>
             </div>
           </div>
-          <div class="web-form">
-            
+            <div class="web-form">
+              
         <div class="notch"></div>
         <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
         <div class="scroll">
@@ -1141,6 +1164,7 @@
           </main>
         </div>
       
+            </div>
           </div>
         </div>
       </div>
