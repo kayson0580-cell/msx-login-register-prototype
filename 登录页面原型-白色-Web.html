@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSX 登录原型 · Web 版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-en: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-cn: 'PingFang SC', 'Noto Sans SC', 'Hiragino Sans GB', sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+
+    --bg: #ffffff;
+    --surface: #f5f5f6;
+    --surface-2: #ececee;
+    --surface-hover: #e5e5e8;
+    --border: rgba(9,9,11,.09);
+    --border-strong: rgba(9,9,11,.16);
+    --border-focus: rgba(9,9,11,.55);
+
+    --text: #0a0a0b;
+    --text-secondary: rgba(9,9,11,.58);
+    --text-muted: rgba(9,9,11,.34);
+    --text-faint: rgba(9,9,11,.16);
+
+    --accent: #0a0a0b;
+    --accent-text: #ffffff;
+
+    --danger: #e0342a;
+    --danger-bg: rgba(224,52,42,.07);
+    --danger-border: rgba(224,52,42,.35);
+    --success: #17a06c;
+    --success-bg: rgba(23,160,108,.08);
+    --success-border: rgba(23,160,108,.38);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    font-family: var(--font-en); color: var(--text); background: var(--bg);
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .cn { font-family: var(--font-cn); }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(9,9,11,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(9,9,11,.035) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+
+  .hero { position: relative; z-index: 1; padding: 72px 24px 20px; text-align: center; }
+  .hero .eyebrow {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: var(--font-cn); font-size: 30px; font-weight: 700;
+    letter-spacing: -.5px; color: var(--text); margin-bottom: 10px;
+  }
+  .hero p { font-size: 14px; color: var(--text-secondary); }
+  .hero .rule { width: 40px; height: 1px; background: var(--border-strong); margin: 28px auto 0; }
+
+  .group { position: relative; z-index: 1; padding: 56px 24px 8px; max-width: 1400px; margin: 0 auto; }
+  .group-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 28px; padding: 0 4px; }
+  .group-num { font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); font-weight: 500; }
+  .group-title { font-family: var(--font-cn); font-size: 15px; font-weight: 600; color: var(--text); }
+  .group-line { flex: 1; height: 1px; background: var(--border); }
+
+  .section-head { position: relative; z-index: 1; max-width: 1400px; margin: 64px auto 0; padding: 0 24px; }
+  .section-head .section-eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+  .section-head h2 { font-family: var(--font-cn); font-size: 22px; font-weight: 700; color: var(--text); padding-bottom: 16px; border-bottom: 2px solid var(--text); }
+  .phones { display: flex; gap: 28px; flex-wrap: wrap; justify-content: flex-start; }
+
+  .phone-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .phone {
+    width: 366px; height: 792px;
+    background: var(--bg);
+    border-radius: 30px;
+    border: 1px solid var(--border-strong);
+    box-shadow: 0 24px 60px rgba(9,9,11,.16);
+    overflow: hidden; position: relative;
+    zoom: 0.86; flex-shrink: 0;
+  }
+  .phone .notch {
+    position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
+    width: 108px; height: 26px; background: #000; border-radius: 16px; z-index: 70;
+    pointer-events: none; border: 1px solid rgba(255,255,255,.06);
+  }
+  .phone .status-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 46px; z-index: 60;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 0 26px 11px; color: var(--text); font-size: 14px; font-weight: 600;
+    font-family: var(--font-mono); pointer-events: none;
+  }
+  .scroll { height: 100%; overflow-y: auto; padding-top: 46px; padding-bottom: 32px; }
+  .scroll::-webkit-scrollbar { display: none; }
+
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px 12px;
+    position: sticky; top: 0; z-index: 50; background: var(--bg);
+  }
+  .logo { display: flex; align-items: center; gap: 8px; }
+  .logo .mark {
+    width: 26px; height: 26px; border-radius: 7px;
+    border: 1px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--text);
+  }
+  .logo span { font-family: var(--font-mono); font-size: 15px; font-weight: 700; letter-spacing: .5px; }
+  .header-actions { display: flex; gap: 6px; }
+  .icon-btn {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: transparent; cursor: default;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+  }
+
+  main { padding: 20px 20px 40px; position: relative; }
+  .title { font-family: var(--font-cn); font-size: 23px; font-weight: 700; margin-bottom: 20px; letter-spacing: -.3px; color: var(--text); }
+
+  .field { margin-bottom: 10px; }
+  .otp-paste-row { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+  .otp-paste { display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; color: var(--text-secondary); cursor: pointer; }
+  .otp-paste svg { flex-shrink: 0; }
+  .otp-row { display: flex; gap: 8px; }
+  .otp-box {
+    flex: 1; width: 0; height: 52px; text-align: center; padding: 0;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 19px; font-weight: 600; color: var(--text); outline: none;
+    transition: border-color .15s;
+  }
+  .otp-box:focus { border-color: var(--border-focus); }
+  .input {
+    display: flex; align-items: center; height: 46px; padding: 0 13px;
+    background: var(--surface);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    transition: border-color .15s;
+  }
+  .input:focus-within { border-color: var(--border-focus); }
+  .input.err { border-color: var(--danger-border); background: var(--danger-bg); }
+  .input.ok { border-color: var(--success-border); }
+  .input input {
+    flex: 1; border: none; background: none; height: 100%;
+    font-size: 14px; color: var(--text); outline: none; font-family: var(--font-en);
+  }
+  .input input::placeholder { color: var(--text-muted); }
+  .input input.mono { font-family: var(--font-mono); letter-spacing: .6px; }
+  .input .suffix { display: flex; align-items: center; cursor: default; padding: 5px; color: var(--text-muted); }
+  .suffix-code {
+    font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+    color: var(--text); white-space: nowrap; cursor: default;
+  }
+  .suffix-code.dim { color: var(--text-muted); }
+
+  .field-err {
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--font-cn); font-size: 12px; color: var(--danger);
+    margin-top: 7px; padding-left: 1px;
+  }
+  .field-ok {
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--font-cn); font-size: 12px; color: var(--success);
+    margin-top: 7px; padding-left: 1px;
+  }
+
+  .pwd-hint {
+    margin-top: 10px; padding: 11px 13px;
+    background: var(--surface);
+    border-radius: 9px; border: 1px solid var(--border);
+    font-family: var(--font-cn); font-size: 12px; color: var(--text-muted); line-height: 1.85;
+  }
+  .pwd-hint .rule { display: flex; align-items: center; gap: 7px; }
+  .pwd-hint .rule .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; background: var(--text-faint); }
+  .pwd-hint .rule.pass .dot { background: var(--success); }
+  .pwd-hint .rule.pass { color: var(--success); }
+  .pwd-hint .rule.fail .dot { background: var(--danger); }
+  .pwd-hint .rule.fail { color: var(--danger); }
+
+  .back-link {
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--font-cn); font-size: 13px; color: var(--text-muted);
+    margin-bottom: 22px; cursor: default;
+  }
+
+  .verify-hint {
+    font-family: var(--font-cn); font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;
+  }
+  .verify-hint strong { color: var(--text); font-weight: 600; font-family: var(--font-mono); }
+
+  .banner {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 13px; border-radius: 10px; margin-bottom: 18px;
+    font-family: var(--font-cn); font-size: 12.5px; line-height: 1.6;
+    border: 1px solid var(--border);
+  }
+  .banner svg { flex-shrink: 0; margin-top: 1px; }
+  .banner-neutral { background: var(--surface); color: var(--text-secondary); }
+  .banner-danger { background: var(--danger-bg); border-color: var(--danger-border); color: #b3261e; }
+  .banner-danger svg { color: var(--danger); }
+  .banner-neutral svg { color: var(--text-muted); }
+  .banner a, .banner .link-inline {
+    color: var(--text); text-decoration: underline; text-underline-offset: 2px;
+    font-weight: 500; cursor: default; white-space: nowrap;
+  }
+
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    width: 100%; height: 46px; border-radius: 10px;
+    font-family: var(--font-cn); font-size: 14.5px; font-weight: 600;
+    cursor: default; transition: opacity .15s, background .15s;
+    border: 1px solid transparent;
+  }
+  .btn-primary { background: var(--accent); color: var(--accent-text); }
+  .btn-primary:hover { opacity: .88; }
+  .btn-primary:active { opacity: .76; }
+  .btn-primary:disabled, .btn-primary.disabled {
+    background: var(--surface-2); color: var(--text-faint); border-color: var(--border);
+  }
+  .btn-secondary { background: transparent; color: var(--text-secondary); border-color: var(--border-strong); }
+  .btn-ghost { background: transparent; color: var(--text-muted); height: auto; padding: 6px; }
+
+  .login-tip { font-family: var(--font-cn); text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-muted); }
+  .login-tip a { color: var(--text); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }
+  .forgot-tip { font-family: var(--font-cn); text-align: right; margin: -4px 0 18px; font-size: 12.5px; color: var(--text-muted); }
+  .forgot-tip a { color: var(--text-secondary); text-decoration: underline; text-underline-offset: 2px; }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; }
+  .divider .line { flex: 1; height: 1px; background: var(--border); }
+  .divider span { font-family: var(--font-cn); font-size: 12px; color: var(--text-faint); }
+
+  .wallet-btn-icon {
+    width: 20px; height: 20px; border-radius: 6px; border: 1px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+
+  .phone-modal-mask {
+    position: absolute; inset: 0; z-index: 150;
+    background: rgba(9,9,11,.45);
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 22px;
+  }
+  .phone-modal {
+    width: 100%; max-width: 320px;
+    background: #ffffff;
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    padding: 20px 18px 18px;
+    box-shadow: 0 30px 90px rgba(9,9,11,.22);
+  }
+  .phone-modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
+  .phone-modal-title { font-family: var(--font-cn); font-size: 15px; font-weight: 700; color: var(--text); }
+  .phone-modal-close {
+    width: 24px; height: 24px; border-radius: 7px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: default;
+  }
+
+  .captcha-box { padding: 4px 0 6px; }
+  .captcha-image {
+    position: relative; width: 100%; height: 148px;
+    border-radius: 10px; overflow: hidden; border: 1px solid var(--border);
+    margin-bottom: 12px; background: #eef0f4;
+  }
+  .captcha-scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .captcha-img-refresh {
+    position: absolute; top: 8px; right: 8px; z-index: 6;
+    width: 26px; height: 26px; border-radius: 7px;
+    background: rgba(10,10,11,.55); border: 1px solid rgba(255,255,255,.14);
+    display: flex; align-items: center; justify-content: center; color: #fff;
+    cursor: default;
+  }
+  .captcha-piece-hole { position: absolute; top: 54px; z-index: 3; pointer-events: none; left: 176px; }
+  .captcha-piece {
+    position: absolute; top: 54px; z-index: 5; left: 14px;
+    filter: drop-shadow(0 6px 12px rgba(9,9,11,.28));
+    transition: filter .2s;
+  }
+  .captcha-image.done .captcha-piece { filter: drop-shadow(0 0 0 transparent); }
+  .captcha-image.done .captcha-piece-hole { opacity: 0; }
+
+  .captcha-track {
+    position: relative; height: 48px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    overflow: hidden; user-select: none; touch-action: none;
+  }
+  .captcha-track.done { border-color: var(--success-border); }
+  .captcha-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--surface-2); transition: none; }
+  .captcha-track.done .captcha-fill { background: var(--success-bg); }
+  .captcha-track-label {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-cn); font-size: 13px; color: var(--text-muted); pointer-events: none; z-index: 1;
+  }
+  .captcha-track.done .captcha-track-label { color: var(--success); font-weight: 500; }
+  .captcha-handle {
+    position: absolute; left: 3px; top: 3px; width: 42px; height: 42px;
+    border-radius: 8px; background: var(--accent); color: var(--accent-text);
+    display: flex; align-items: center; justify-content: center;
+    cursor: grab; z-index: 2; box-shadow: 0 4px 14px rgba(9,9,11,.22);
+  }
+  .captcha-handle:active { cursor: grabbing; }
+  .captcha-track.done .captcha-handle { background: var(--success); color: #eafff4; }
+
+  /* ---------- Wallet connect list ---------- */
+  .wallet-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .wallet-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 13px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+  }
+  .wallet-row .mark {
+    width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+    border: 1px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--text);
+  }
+  .wallet-row .name { font-family: var(--font-cn); font-size: 14px; font-weight: 500; color: var(--text); flex: 1; }
+  .wallet-row .state {
+    font-family: var(--font-cn); font-size: 11px; color: var(--text-muted);
+    border: 1px solid var(--border); border-radius: 100px; padding: 3px 9px;
+  }
+  .wallet-row .state.installed { color: var(--success); border-color: var(--success-border); }
+  .wallet-row.disabled { opacity: .45; }
+
+  /* ---------- Signing / loading state ---------- */
+  .sign-wait { display: flex; flex-direction: column; align-items: center; padding: 18px 4px 8px; }
+  .sign-wait .mark-lg {
+    width: 56px; height: 56px; border-radius: 15px; border: 1px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
+    position: relative;
+  }
+  .sign-wait .mark-lg::after {
+    content: ''; position: absolute; inset: -6px; border-radius: 19px;
+    border: 1px solid var(--border); animation: pulse-ring 1.8s ease-out infinite;
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(.9); opacity: .8; }
+    100% { transform: scale(1.25); opacity: 0; }
+  }
+  .sign-wait .msg { font-family: var(--font-cn); font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .sign-wait .sub { font-family: var(--font-cn); font-size: 12.5px; color: var(--text-muted); text-align: center; line-height: 1.6; }
+  .sign-wait.result .mark-lg::after { display: none; }
+
+  .addr-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 13px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border);
+    margin-bottom: 18px;
+  }
+  .addr-chip .dot-live { width: 7px; height: 7px; border-radius: 50%; background: var(--success); flex-shrink: 0; }
+  .addr-chip span.a { font-family: var(--font-mono); font-size: 13px; color: var(--text); letter-spacing: .3px; }
+
+  .phone-label { display: flex; align-items: center; gap: 8px; padding-left: 2px; }
+  .phone-label .idx {
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-faint);
+    border: 1px solid var(--border); border-radius: 5px; padding: 1px 6px;
+  }
+  .phone-label .txt { font-family: var(--font-cn); font-size: 12.5px; font-weight: 500; color: var(--text-secondary); }
+  .phone-label .txt.warn { color: var(--danger); }
+
+  footer.gallery-foot {
+    position: relative; z-index: 1; text-align: center; padding: 60px 24px 80px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); letter-spacing: .5px;
+  }
+
+  @media (max-width: 1000px) { .phones { justify-content: center; } }
+
+  /* ============ WEB (desktop) FRAME ============ */
+  .web-wraps { display: flex; gap: 32px; flex-wrap: wrap; justify-content: flex-start; }
+  .web-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .web-frame {
+    width: 1040px; height: 640px;
+    background: var(--bg);
+    border-radius: 14px;
+    border: 1px solid var(--border-strong);
+    box-shadow: 0 24px 60px rgba(9,9,11,.16);
+    overflow: hidden; position: relative;
+    zoom: 0.4; flex-shrink: 0;
+    display: flex; flex-direction: column;
+  }
+  .web-chrome {
+    height: 34px; flex-shrink: 0; display: flex; align-items: center; gap: 6px;
+    padding: 0 14px; border-bottom: 1px solid var(--border);
+  }
+  .web-chrome span { width: 9px; height: 9px; border-radius: 50%; background: var(--border-strong); }
+  .web-body { flex: 1; display: flex; min-height: 0; }
+
+  .web-brand {
+    width: 40%; flex-shrink: 0; background: #0a0a0b; color: #fff; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: space-between; padding: 40px 36px;
+  }
+  .web-brand-grid {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 60% at 25% 15%, #000 40%, transparent 100%);
+  }
+  .logo-lg { display: flex; align-items: center; gap: 9px; position: relative; z-index: 1; }
+  .logo-lg .mark {
+    width: 32px; height: 32px; border-radius: 9px; border: 1px solid rgba(255,255,255,.3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-weight: 700; font-size: 15px;
+  }
+  .logo-lg span { font-family: var(--font-mono); font-weight: 700; font-size: 17px; letter-spacing: .5px; }
+  .web-brand-mid { position: relative; z-index: 1; }
+  .web-brand .eyebrow {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,.45); margin-bottom: 14px;
+  }
+  .web-brand h2 { font-family: var(--font-cn); font-size: 25px; font-weight: 700; line-height: 1.45; margin-bottom: 12px; letter-spacing: -.3px; }
+  .web-brand p.desc { font-family: var(--font-cn); font-size: 13.5px; color: rgba(255,255,255,.6); line-height: 1.7; max-width: 320px; }
+  .web-brand-stats { position: relative; z-index: 1; display: flex; gap: 30px; }
+  .web-brand-stats .stat { display: flex; flex-direction: column; gap: 5px; }
+  .web-brand-stats .stat-val { font-family: var(--font-mono); font-size: 15px; font-weight: 700; }
+  .web-brand-stats .stat-label { font-family: var(--font-cn); font-size: 11.5px; color: rgba(255,255,255,.45); }
+
+  .web-form { flex: 1; min-width: 0; position: relative; overflow-y: auto; padding: 44px 56px; }
+  .web-form .scroll { height: auto; overflow: visible; padding-top: 0; padding-bottom: 0; max-width: 420px; }
+  .web-form .notch, .web-form .status-bar { display: none; }
+  .web-form .phone-modal-mask { border-radius: 0 0 14px 0; }
+  .web-form .phone-modal { max-width: 380px; }
+
+  .web-tabs { display: flex; gap: 24px; margin-bottom: 26px; border-bottom: 1px solid var(--border); max-width: 420px; }
+  .web-tab { font-family: var(--font-cn); font-size: 14px; font-weight: 600; color: var(--text-muted); padding-bottom: 12px; position: relative; }
+  .web-tab.active { color: var(--text); }
+  .web-tab.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--text); }
+
+  @media (max-width: 1000px) { .web-wraps { justify-content: center; } }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<div class="hero">
+  <div class="eyebrow cn">LOGIN FLOW · WEB · WHITE</div>
+  <h1 class="cn">MSX 登录原型 · Web 版</h1>
+  <div class="rule"></div>
+</div>
+
+
+<!-- ══════════════ SECTION · 邮箱登陆 ══════════════ -->
+<div class="section-head">
+  <div class="section-eyebrow cn">EMAIL LOGIN</div>
+  <h2 class="cn">邮箱登陆</h2>
+</div>
+
+<!-- ══════════════ GROUP 1 · 账号密码页面 ══════════════ -->
+<div class="group">
+  <div class="group-head">
+    <span class="group-num mono">01</span>
+    <span class="group-title cn">账号密码页面</span>
+    <span class="group-line"></span>
+  </div>
+  <div class="web-wraps">
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header">
+            <div class="logo"><div class="mark">M</div><span>MSX</span></div>
+            <div class="header-actions">
+              <div class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            </div>
+          </div>
+          <main>
+            <h1 class="title cn">欢迎回来</h1>
+
+            <div class="field">
+              <div class="input"><input type="email" placeholder="请输入邮箱地址"></div>
+            </div>
+
+            <button type="button" class="btn btn-primary cn">继续</button>
+
+            <div class="divider"><span class="line"></span><span class="cn">或</span><span class="line"></span></div>
+
+            <button type="button" class="btn btn-secondary cn">
+              <span class="wallet-btn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="15" r="1"/></svg></span>
+              使用钱包登录
+            </button>
+
+            <p class="login-tip cn">还没有账号？<a href="#">注册</a></p>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">01</span><span class="txt cn">登录首屏 · 仅显示邮箱</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header">
+            <div class="logo"><div class="mark">M</div><span>MSX</span></div>
+            <div class="header-actions">
+              <div class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            </div>
+          </div>
+          <main>
+            <h1 class="title cn">欢迎回来</h1>
+
+            <div class="field">
+              <div class="input err"><input type="email" value="user@wrong"></div>
+              <div class="field-err cn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                邮箱格式不正确
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary disabled cn" style="margin-top:12px">继续</button>
+
+            <div class="divider"><span class="line"></span><span class="cn">或</span><span class="line"></span></div>
+
+            <button type="button" class="btn btn-secondary cn">
+              <span class="wallet-btn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="15" r="1"/></svg></span>
+              使用钱包登录
+            </button>
+
+            <p class="login-tip cn">还没有账号？<a href="#">注册</a></p>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">02</span><span class="txt cn warn">格式校验未通过</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header">
+            <div class="logo"><div class="mark">M</div><span>MSX</span></div>
+            <div class="header-actions">
+              <div class="icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            </div>
+          </div>
+          <main>
+            <h1 class="title cn">欢迎回来</h1>
+            <div class="field"><div class="input"><input type="email" value="kayson@msx.com"></div></div>
+            <button type="button" class="btn btn-primary cn">继续</button>
+            <div class="divider"><span class="line"></span><span class="cn">或</span><span class="line"></span></div>
+            <button type="button" class="btn btn-secondary cn">
+              <span class="wallet-btn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="15" r="1"/></svg></span>
+              使用钱包登录
+            </button>
+            <p class="login-tip cn">还没有账号？<a href="#">注册</a></p>
+          </main>
+        </div>
+
+        <div class="phone-modal-mask">
+          <div class="phone-modal">
+            <div class="phone-modal-head">
+              <span class="phone-modal-title cn">安全验证</span>
+              <span class="phone-modal-close">✕</span>
+            </div>
+            <p class="verify-hint cn" style="margin-bottom:16px">为保护账户安全，请完成下方拼图验证</p>
+
+            <div class="captcha-box">
+              <div class="captcha-image" id="captcha-img-1">
+                <svg class="captcha-scene" viewBox="0 0 284 148" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="284" height="148" fill="#eef0f4"/>
+                  <circle cx="232" cy="34" r="15" fill="rgba(9,9,11,.06)"/>
+                  <polygon points="0,148 55,58 105,108 148,48 195,102 236,66 284,104 284,148" fill="#dde1e7"/>
+                  <polygon points="0,148 88,92 158,128 224,86 284,122 284,148" fill="#c7ccd4"/>
+                </svg>
+                <div class="captcha-img-refresh" onclick="resetCaptcha(document.getElementById('captcha-1'))">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                </div>
+                <svg class="captcha-piece-hole" width="40" height="40" viewBox="0 0 48 48">
+                  <path d="M10,8 L38,8 L38,17 C46,17 46,31 38,31 L38,40 L10,40 L10,31 C18,31 18,17 10,17 Z" fill="rgba(9,9,11,.08)" stroke="rgba(9,9,11,.45)" stroke-width="1.5" stroke-dasharray="3,3"/>
+                </svg>
+                <svg class="captcha-piece" id="captcha-piece-1" width="40" height="40" viewBox="0 0 48 48">
+                  <path d="M10,8 L38,8 L38,17 C46,17 46,31 38,31 L38,40 L10,40 L10,31 C18,31 18,17 10,17 Z" fill="#0a0a0b"/>
+                </svg>
+              </div>
+
+              <div class="captcha-track" id="captcha-1" data-piece="captcha-piece-1" data-btn="captcha-btn-1" data-hole-left="176" data-piece-start="14">
+                <div class="captcha-fill"></div>
+                <div class="captcha-track-label cn">拖动滑块完成拼图</div>
+                <div class="captcha-handle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="7 18 13 12 7 6"/><polyline points="13 18 19 12 13 6"/></svg></div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary disabled cn" id="captcha-btn-1" style="margin-top:16px">确认</button>
+          </div>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">03</span><span class="txt cn">人机校验 · 弹窗 · 可拖动</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:41</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <h1 class="title cn">欢迎回来</h1>
+
+            <div class="field"><div class="input"><input type="email" value="new@example.com"></div></div>
+
+            <div class="banner banner-neutral cn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <div>该邮箱尚未注册，<span class="link-inline">去注册 →</span></div>
+            </div>
+
+            <button type="button" class="btn btn-secondary cn" style="margin-top:14px">前往注册</button>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">04</span><span class="txt cn">账号不存在 · 引导注册</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <h1 class="title cn">欢迎回来</h1>
+
+            <div class="field">
+              <div class="input"><input type="email" value="kayson@msx.com" oninput="hidePwdReveal(this)"></div>
+            </div>
+            <div class="pwd-reveal">
+              <div class="field">
+                <div class="input"><input type="password" value="••••••••" class="cn">
+                  <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                </div>
+              </div>
+              <p class="forgot-tip cn"><a href="#">忘记密码？</a></p>
+            </div>
+
+            <button type="button" class="btn btn-primary cn">登录</button>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">05</span><span class="txt cn">密码登录 · 邮箱下方展开密码框</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <h1 class="title cn">欢迎回来</h1>
+
+            <div class="field">
+              <div class="input"><input type="email" value="kayson@msx.com" oninput="hidePwdReveal(this)"></div>
+            </div>
+            <div class="pwd-reveal">
+              <div class="field">
+                <div class="input err"><input type="password" value="•••••" class="cn">
+                  <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                </div>
+                <div class="field-err cn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  密码错误，请重新输入
+                </div>
+              </div>
+              <p class="forgot-tip cn"><a href="#">忘记密码？</a></p>
+            </div>
+
+            <button type="button" class="btn btn-primary cn">登录</button>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">06</span><span class="txt cn warn">密码错误</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ GROUP 2 · 邮箱验证码页面 ══════════════ -->
+<div class="group">
+  <div class="group-head">
+    <span class="group-num mono">02</span>
+    <span class="group-title cn">邮箱验证码页面</span>
+    <span class="group-line"></span>
+  </div>
+  <div class="web-wraps">
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
+            <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
+            <p class="verify-hint cn">验证邮箱：<strong>ca****@gmail.com</strong></p>
+
+            <div class="field">
+              <div class="input"><input type="text" class="mono" placeholder="6位验证码" maxlength="6">
+                <span class="suffix-code cn" onclick="startCountdown(this)">获取验证码</span>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary disabled cn">确认</button>
+            <p class="login-tip cn">无法使用邮箱验证器？<a href="#">改用其他验证项</a></p>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">07</span><span class="txt cn">邮箱验证码 · 2FA兜底/无密码账号入口</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
+            <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
+            <p class="verify-hint cn">验证邮箱：<strong>ca****@gmail.com</strong></p>
+
+            <div class="field">
+              <div class="input err"><input type="text" class="mono" value="192837">
+                <span class="suffix-code dim cn">57s 后重新发送</span>
+              </div>
+              <div class="field-err cn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                验证码错误，请重新输入
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary cn">确认</button>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">08</span><span class="txt cn warn">验证码错误</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
+            <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
+            <p class="verify-hint cn">验证邮箱：<strong>ca****@gmail.com</strong></p>
+            <div class="field">
+              <div class="input"><input type="text" class="mono" placeholder="6位验证码" maxlength="6">
+                <span class="suffix-code cn">获取验证码</span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary disabled cn">确认</button>
+            <p class="login-tip cn">无法使用邮箱验证器？<a href="#">改用其他验证项</a></p>
+          </main>
+        </div>
+
+        <div class="phone-modal-mask">
+          <div class="phone-modal">
+            <div class="phone-modal-head">
+              <span class="phone-modal-title cn">选择验证方式</span>
+              <span class="phone-modal-close">✕</span>
+            </div>
+            <p class="verify-hint cn" style="margin:2px 0 14px">选择一种可用的验证方式继续</p>
+
+            <div class="wallet-list">
+              <div class="wallet-row"><span class="mark">G</span><span class="name cn">谷歌验证</span><span class="state cn">可切换</span></div>
+              <div class="wallet-row disabled"><span class="mark">@</span><span class="name cn">邮箱验证</span><span class="state cn">当前方式</span></div>
+            </div>
+          </div>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">09</span><span class="txt cn">改用其他验证项 · 弹窗 · 邮箱验证页触发</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ GROUP 3 · 谷歌验证码页面 ══════════════ -->
+<div class="group">
+  <div class="group-head">
+    <span class="group-num mono">03</span>
+    <span class="group-title cn">谷歌验证码页面</span>
+    <span class="group-line"></span>
+  </div>
+  <div class="web-wraps">
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
+            <h1 class="title cn" style="font-size:21px">谷歌验证器</h1>
+            <p class="verify-hint cn">打开谷歌验证器 App，输入当前显示的 6 位动态验证码</p>
+
+            <div class="field">
+              <div class="otp-paste-row">
+                <span class="otp-paste cn" onclick="pasteOTP(this)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+                  粘贴
+                </span>
+              </div>
+              <div class="otp-row mono">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary disabled cn">确认</button>
+            <p class="login-tip cn">无法使用谷歌验证器？<a href="#">改用其他验证项</a></p>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">10</span><span class="txt cn">二次验证 · 已绑定谷歌验证器</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:42</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
+            <h1 class="title cn" style="font-size:21px">谷歌验证器</h1>
+            <p class="verify-hint cn">打开谷歌验证器 App，输入当前显示的 6 位动态验证码</p>
+            <div class="field">
+              <div class="otp-row mono">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+                <input class="otp-box" type="text" inputmode="numeric" maxlength="1">
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary disabled cn">确认</button>
+            <p class="login-tip cn">无法使用谷歌验证器？<a href="#">改用其他验证项</a></p>
+          </main>
+        </div>
+
+        <div class="phone-modal-mask">
+          <div class="phone-modal">
+            <div class="phone-modal-head">
+              <span class="phone-modal-title cn">选择验证方式</span>
+              <span class="phone-modal-close">✕</span>
+            </div>
+            <p class="verify-hint cn" style="margin:2px 0 14px">选择一种可用的验证方式继续</p>
+
+            <div class="wallet-list">
+              <div class="wallet-row disabled"><span class="mark">G</span><span class="name cn">谷歌验证</span><span class="state cn">当前方式</span></div>
+              <div class="wallet-row"><span class="mark">@</span><span class="name cn">邮箱验证</span><span class="state cn">可切换</span></div>
+            </div>
+          </div>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">11</span><span class="txt cn">改用其他验证项 · 弹窗 · 谷歌验证页触发</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ GROUP 4 · 补充密码页面 ══════════════ -->
+<div class="group">
+  <div class="group-head">
+    <span class="group-num mono">04</span>
+    <span class="group-title cn">补充密码页面</span>
+    <span class="group-line"></span>
+  </div>
+  <div class="web-wraps">
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab active cn">邮箱登录</span><span class="web-tab cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:43</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
+            <h1 class="title cn" style="font-size:21px">设置登录密码</h1>
+            <p class="verify-hint cn">验证通过，该账号还没有登录密码，设置后可直接用密码登录</p>
+
+            <div class="field">
+              <div class="input">
+                <input type="password" class="cn" placeholder="设置登录密码" onfocus="this.closest('.field').querySelector('.pwd-hint').style.display='block'" onblur="this.closest('.field').querySelector('.pwd-hint').style.display='none'" oninput="checkPwd(this)">
+                <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+              </div>
+              <div class="pwd-hint cn" style="display:none">
+                <div class="rule" data-rule="len"><span class="dot"></span> 至少 8 个字符</div>
+                <div class="rule" data-rule="upper"><span class="dot"></span> 包含大写字母</div>
+                <div class="rule" data-rule="digit"><span class="dot"></span> 包含数字</div>
+                <div class="rule" data-rule="special"><span class="dot"></span> 包含特殊字符</div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary cn" style="margin-top:12px">保存并登录</button>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">12</span><span class="txt cn">验证通过 · 补设密码</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SECTION · 钱包登陆 ══════════════ -->
+<div class="section-head">
+  <div class="section-eyebrow cn">WALLET LOGIN</div>
+  <h2 class="cn">钱包登陆</h2>
+</div>
+
+<!-- ══════════════ GROUP 5 · 钱包授权流程 ══════════════ -->
+<div class="group">
+  <div class="group-head">
+    <span class="group-num mono">05</span>
+    <span class="group-title cn">钱包授权流程</span>
+    <span class="group-line"></span>
+  </div>
+  <div class="web-wraps">
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:44</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <h1 class="title cn">欢迎回来</h1>
+            <div class="field"><div class="input"><input type="email" placeholder="请输入邮箱地址"></div></div>
+            <button type="button" class="btn btn-primary cn">继续</button>
+            <div class="divider"><span class="line"></span><span class="cn">或</span><span class="line"></span></div>
+            <button type="button" class="btn btn-secondary cn">
+              <span class="wallet-btn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="15" r="1"/></svg></span>
+              使用钱包登录
+            </button>
+          </main>
+        </div>
+
+        <div class="phone-modal-mask">
+          <div class="phone-modal">
+            <div class="phone-modal-head">
+              <span class="phone-modal-title cn">连接钱包</span>
+              <span class="phone-modal-close">✕</span>
+            </div>
+            <p class="verify-hint cn" style="margin:2px 0 14px">选择一个钱包完成签名登录</p>
+
+            <div class="wallet-list">
+              <div class="wallet-row"><span class="mark">M</span><span class="name cn">MetaMask</span><span class="state installed cn">已安装</span></div>
+              <div class="wallet-row"><span class="mark">P</span><span class="name cn">Phantom</span><span class="state installed cn">已安装</span></div>
+              <div class="wallet-row"><span class="mark">O</span><span class="name cn">OKX Wallet</span><span class="state cn">扫码连接</span></div>
+              <div class="wallet-row"><span class="mark">W</span><span class="name cn">WalletConnect</span><span class="state cn">扫码连接</span></div>
+              <div class="wallet-row"><span class="mark">···</span><span class="name cn">更多钱包</span><span class="state cn">150+</span></div>
+            </div>
+          </div>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">13</span><span class="txt cn">连接钱包 · 弹窗 · 钱包列表</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:44</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <h1 class="title cn">欢迎回来</h1>
+            <div class="field"><div class="input"><input type="email" placeholder="请输入邮箱地址"></div></div>
+            <button type="button" class="btn btn-primary cn">继续</button>
+          </main>
+        </div>
+
+        <div class="phone-modal-mask">
+          <div class="phone-modal">
+            <div class="phone-modal-head">
+              <span class="phone-modal-title cn">等待签名</span>
+              <span class="phone-modal-close">✕</span>
+            </div>
+            <div class="sign-wait">
+              <div class="mark-lg"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="15" r="1"/></svg></div>
+              <div class="msg cn">请在钱包中确认签名</div>
+              <div class="sub cn">这一步不产生链上交易，也不会收取任何手续费，仅用于证明该钱包由你本人持有</div>
+            </div>
+          </div>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">14</span><span class="txt cn">等待钱包签名确认</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <h1 class="title cn">欢迎回来</h1>
+            <div class="field"><div class="input"><input type="email" placeholder="请输入邮箱地址"></div></div>
+            <button type="button" class="btn btn-primary cn">继续</button>
+          </main>
+        </div>
+
+        <div class="phone-modal-mask">
+          <div class="phone-modal">
+            <div class="phone-modal-head">
+              <span class="phone-modal-title cn">钱包登录</span>
+              <span class="phone-modal-close">✕</span>
+            </div>
+
+            <div class="sign-wait result">
+              <div class="mark-lg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+              <div class="msg cn">该钱包尚未注册</div>
+              <div class="sub cn">该地址还没有 MSX 账号，因业务调整，MSX 将不再支持钱包地址注册，但是已注册的钱包地址可以继续登录</div>
+            </div>
+
+            <button type="button" class="btn btn-primary cn" style="margin-top:16px">知道了</button>
+          </div>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">15</span><span class="txt cn">钱包未注册 · 弹窗提示 · 不再支持钱包注册</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ GROUP 6 · 补充账号密码 ══════════════ -->
+<div class="group">
+  <div class="group-head">
+    <span class="group-num mono">06</span>
+    <span class="group-title cn">补充账号密码</span>
+    <span class="group-line"></span>
+  </div>
+  <div class="web-wraps">
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <h1 class="title cn" style="font-size:21px">绑定邮箱</h1>
+
+            <div class="addr-chip">
+              <span class="dot-live"></span>
+              <span class="a">0x6c21...f139</span>
+            </div>
+
+            <p class="verify-hint cn">为了账号安全与后续找回，请绑定邮箱并设置登录密码</p>
+
+            <div class="field">
+              <div class="input"><input type="email" placeholder="请输入邮箱地址"></div>
+            </div>
+            <div class="field">
+              <div class="input">
+                <input type="password" class="cn" placeholder="设置登录密码" onfocus="this.closest('.field').querySelector('.pwd-hint').style.display='block'" onblur="this.closest('.field').querySelector('.pwd-hint').style.display='none'" oninput="checkPwd(this)">
+                <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+              </div>
+              <div class="pwd-hint cn" style="display:none">
+                <div class="rule" data-rule="len"><span class="dot"></span> 至少 8 个字符</div>
+                <div class="rule" data-rule="upper"><span class="dot"></span> 包含大写字母</div>
+                <div class="rule" data-rule="digit"><span class="dot"></span> 包含数字</div>
+                <div class="rule" data-rule="special"><span class="dot"></span> 包含特殊字符</div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary cn" style="margin-top:12px">确认</button>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">16</span><span class="txt cn">钱包已注册 · 未绑邮箱 · 补绑</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <h1 class="title cn" style="font-size:21px">绑定邮箱</h1>
+
+            <div class="addr-chip">
+              <span class="dot-live"></span>
+              <span class="a">0x6c21...f139</span>
+            </div>
+
+            <p class="verify-hint cn">为了账号安全与后续找回，请绑定邮箱并设置登录密码</p>
+
+            <div class="field"><div class="input"><input type="email" value="kayson@msx.com"></div></div>
+            <div class="field"><div class="input"><input type="password" value="••••••••" class="cn">
+              <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            </div></div>
+
+            <button type="button" class="btn btn-primary cn" style="margin-top:12px">确认</button>
+          </main>
+        </div>
+
+        <div class="phone-modal-mask">
+          <div class="phone-modal">
+            <div class="phone-modal-head">
+              <span class="phone-modal-title cn">安全验证</span>
+              <span class="phone-modal-close">✕</span>
+            </div>
+            <p class="verify-hint cn" style="margin-bottom:16px">为保护账户安全，请完成下方拼图验证</p>
+
+            <div class="captcha-box">
+              <div class="captcha-image" id="captcha-img-2">
+                <svg class="captcha-scene" viewBox="0 0 284 148" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="284" height="148" fill="#eef0f4"/>
+                  <circle cx="232" cy="34" r="15" fill="rgba(9,9,11,.06)"/>
+                  <polygon points="0,148 55,58 105,108 148,48 195,102 236,66 284,104 284,148" fill="#dde1e7"/>
+                  <polygon points="0,148 88,92 158,128 224,86 284,122 284,148" fill="#c7ccd4"/>
+                </svg>
+                <div class="captcha-img-refresh" onclick="resetCaptcha(document.getElementById('captcha-2'))">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                </div>
+                <svg class="captcha-piece-hole" width="40" height="40" viewBox="0 0 48 48">
+                  <path d="M10,8 L38,8 L38,17 C46,17 46,31 38,31 L38,40 L10,40 L10,31 C18,31 18,17 10,17 Z" fill="rgba(9,9,11,.08)" stroke="rgba(9,9,11,.45)" stroke-width="1.5" stroke-dasharray="3,3"/>
+                </svg>
+                <svg class="captcha-piece" id="captcha-piece-2" width="40" height="40" viewBox="0 0 48 48">
+                  <path d="M10,8 L38,8 L38,17 C46,17 46,31 38,31 L38,40 L10,40 L10,31 C18,31 18,17 10,17 Z" fill="#0a0a0b"/>
+                </svg>
+              </div>
+
+              <div class="captcha-track" id="captcha-2" data-piece="captcha-piece-2" data-btn="captcha-btn-2" data-hole-left="176" data-piece-start="14">
+                <div class="captcha-fill"></div>
+                <div class="captcha-track-label cn">拖动滑块完成拼图</div>
+                <div class="captcha-handle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="7 18 13 12 7 6"/><polyline points="13 18 19 12 13 6"/></svg></div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary disabled cn" id="captcha-btn-2" style="margin-top:16px">确认</button>
+          </div>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">17</span><span class="txt cn">绑定邮箱 · 提交后人机校验</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <div class="back-link cn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
+            <h1 class="title cn" style="font-size:21px">验证邮箱</h1>
+            <p class="verify-hint cn">人机校验已通过，验证码已发送至 <strong>kayson@msx.com</strong></p>
+
+            <div class="field">
+              <div class="input"><input type="text" class="mono" placeholder="6位验证码" maxlength="6">
+                <span class="suffix-code cn" onclick="startCountdown(this)">获取验证码</span>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary disabled cn">确认并登录</button>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">18</span><span class="txt cn">绑定邮箱 · 验证码确认后完成登录</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ GROUP 7 · 补充密码页面 ══════════════ -->
+<div class="group">
+  <div class="group-head">
+    <span class="group-num mono">07</span>
+    <span class="group-title cn">补充密码页面</span>
+    <span class="group-line"></span>
+  </div>
+  <div class="web-wraps">
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <h1 class="title cn" style="font-size:21px">设置登录密码</h1>
+
+            <div class="addr-chip">
+              <span class="dot-live"></span>
+              <span class="a">0x6c21...f139</span>
+            </div>
+
+            <p class="verify-hint cn">该钱包已绑定邮箱 <strong>kayson@msx.com</strong>，请设置登录密码</p>
+
+            <div class="field">
+              <div class="input">
+                <input type="password" class="cn" placeholder="设置登录密码" onfocus="this.closest('.field').querySelector('.pwd-hint').style.display='block'" onblur="this.closest('.field').querySelector('.pwd-hint').style.display='none'" oninput="checkPwd(this)">
+                <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+              </div>
+              <div class="pwd-hint cn" style="display:none">
+                <div class="rule" data-rule="len"><span class="dot"></span> 至少 8 个字符</div>
+                <div class="rule" data-rule="upper"><span class="dot"></span> 包含大写字母</div>
+                <div class="rule" data-rule="digit"><span class="dot"></span> 包含数字</div>
+                <div class="rule" data-rule="special"><span class="dot"></span> 包含特殊字符</div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary cn" style="margin-top:12px">确认</button>
+          </main>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">19</span><span class="txt cn">钱包已注册 · 已绑邮箱未设密码</span></div>
+    </div>
+    <div class="web-wrap">
+      <div class="web-frame">
+        <div class="web-chrome"><span></span><span></span><span></span></div>
+        <div class="web-body">
+          <div class="web-brand">
+            <div class="web-brand-grid"></div>
+            <div class="logo-lg"><div class="mark">M</div><span>MSX</span></div>
+            <div class="web-brand-mid">
+              <div class="eyebrow mono">MSX · SECURE ACCESS</div>
+              <h2 class="cn">登录后继续你的交易</h2>
+              <p class="desc cn">邮箱 + 谷歌验证器双重验证，或使用钱包一键直连登录。</p>
+            </div>
+            <div class="web-brand-stats">
+              <div class="stat"><span class="stat-val mono">2FA</span><span class="stat-label cn">双重验证</span></div>
+              <div class="stat"><span class="stat-val mono">Web3</span><span class="stat-label cn">钱包直连</span></div>
+              <div class="stat"><span class="stat-val mono">24/7</span><span class="stat-label cn">节点可用</span></div>
+            </div>
+          </div>
+          <div class="web-form">
+            <div class="web-tabs"><span class="web-tab cn">邮箱登录</span><span class="web-tab active cn">钱包登录</span></div>
+            
+        <div class="notch"></div>
+        <div class="status-bar mono"><span>9:45</span><span>●●●</span></div>
+        <div class="scroll">
+          <div class="header"><div class="logo"><div class="mark">M</div><span>MSX</span></div></div>
+          <main>
+            <h1 class="title cn" style="font-size:21px">设置登录密码</h1>
+
+            <div class="addr-chip">
+              <span class="dot-live"></span>
+              <span class="a">0x6c21...f139</span>
+            </div>
+
+            <p class="verify-hint cn">该钱包已绑定邮箱 <strong>kayson@msx.com</strong>，请设置登录密码</p>
+
+            <div class="field"><div class="input"><input type="password" value="••••••••" class="cn">
+              <span class="suffix"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            </div></div>
+
+            <button type="button" class="btn btn-primary cn" style="margin-top:12px">确认</button>
+          </main>
+        </div>
+
+        <div class="phone-modal-mask">
+          <div class="phone-modal">
+            <div class="phone-modal-head">
+              <span class="phone-modal-title cn">安全验证</span>
+              <span class="phone-modal-close">✕</span>
+            </div>
+            <p class="verify-hint cn" style="margin-bottom:16px">为保护账户安全，请完成下方拼图验证</p>
+
+            <div class="captcha-box">
+              <div class="captcha-image" id="captcha-img-4">
+                <svg class="captcha-scene" viewBox="0 0 284 148" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="284" height="148" fill="#eef0f4"/>
+                  <circle cx="232" cy="34" r="15" fill="rgba(9,9,11,.06)"/>
+                  <polygon points="0,148 55,58 105,108 148,48 195,102 236,66 284,104 284,148" fill="#dde1e7"/>
+                  <polygon points="0,148 88,92 158,128 224,86 284,122 284,148" fill="#c7ccd4"/>
+                </svg>
+                <div class="captcha-img-refresh" onclick="resetCaptcha(document.getElementById('captcha-4'))">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                </div>
+                <svg class="captcha-piece-hole" width="40" height="40" viewBox="0 0 48 48">
+                  <path d="M10,8 L38,8 L38,17 C46,17 46,31 38,31 L38,40 L10,40 L10,31 C18,31 18,17 10,17 Z" fill="rgba(9,9,11,.08)" stroke="rgba(9,9,11,.45)" stroke-width="1.5" stroke-dasharray="3,3"/>
+                </svg>
+                <svg class="captcha-piece" id="captcha-piece-4" width="40" height="40" viewBox="0 0 48 48">
+                  <path d="M10,8 L38,8 L38,17 C46,17 46,31 38,31 L38,40 L10,40 L10,31 C18,31 18,17 10,17 Z" fill="#0a0a0b"/>
+                </svg>
+              </div>
+
+              <div class="captcha-track" id="captcha-4" data-piece="captcha-piece-4" data-btn="captcha-btn-4" data-hole-left="176" data-piece-start="14">
+                <div class="captcha-fill"></div>
+                <div class="captcha-track-label cn">拖动滑块完成拼图</div>
+                <div class="captcha-handle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="7 18 13 12 7 6"/><polyline points="13 18 19 12 13 6"/></svg></div>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary disabled cn" id="captcha-btn-4" style="margin-top:16px">确认并登录</button>
+          </div>
+        </div>
+      
+          </div>
+        </div>
+      </div>
+      <div class="phone-label"><span class="idx">20</span><span class="txt cn">设置密码 · 人机校验通过后直接完成登录</span></div>
+    </div>
+  </div>
+</div>
+
+
+<footer class="gallery-foot cn">MSX · WEB PROTOTYPE</footer>
+
+<script>
+function checkPwd(input) {
+  var v = input.value
+  var hint = input.closest('.field').querySelector('.pwd-hint')
+  if (!hint) return
+  var hasInput = v.length > 0
+  setRule(hint, 'len', v.length >= 8, hasInput)
+  setRule(hint, 'upper', /[A-Z]/.test(v), hasInput)
+  setRule(hint, 'digit', /\d/.test(v), hasInput)
+  setRule(hint, 'special', /[!@#$%^&*(),.?":{}|<>_\-+=~`\[\]\\;'\/]/.test(v), hasInput)
+}
+function setRule(hint, rule, ok, showFail) {
+  var el = hint.querySelector('[data-rule=' + rule + ']')
+  if (!el) return
+  el.classList.remove('pass', 'fail')
+  if (ok) el.classList.add('pass')
+  else if (showFail) el.classList.add('fail')
+}
+
+function startCountdown(el) {
+  if (el._counting) return
+  el._counting = true
+  var s = 60
+  el.classList.add('dim')
+  el.textContent = s + 's 后重新发送'
+  var t = setInterval(function() {
+    s--
+    if (s <= 0) {
+      clearInterval(t); el._counting = false
+      el.classList.remove('dim'); el.textContent = '获取验证码'
+    } else { el.textContent = s + 's 后重新发送' }
+  }, 1000)
+}
+
+/* ---------- Captcha slider (pointer-based drag, synced with puzzle piece) ---------- */
+function initCaptcha(track) {
+  var handle = track.querySelector('.captcha-handle')
+  var fill = track.querySelector('.captcha-fill')
+  var label = track.querySelector('.captcha-track-label')
+  var dragging = false, startX = 0, startLeft = 0
+  var btn = document.getElementById(track.getAttribute('data-btn'))
+
+  var piece = document.getElementById(track.getAttribute('data-piece'))
+  var pieceStart = parseFloat(track.getAttribute('data-piece-start')) || 0
+  var holeLeft = parseFloat(track.getAttribute('data-hole-left')) || 0
+  var image = piece ? piece.closest('.captcha-image') : null
+
+  function maxX() { return track.clientWidth - handle.offsetWidth - 6 }
+  function movePiece(progress) {
+    if (!piece) return
+    piece.style.left = (pieceStart + progress * (holeLeft - pieceStart)) + 'px'
+  }
+
+  handle.addEventListener('pointerdown', function(e) {
+    if (track.classList.contains('done')) return
+    dragging = true; startX = e.clientX; startLeft = handle.offsetLeft
+    handle.setPointerCapture(e.pointerId)
+  })
+  handle.addEventListener('pointermove', function(e) {
+    if (!dragging) return
+    var dx = e.clientX - startX
+    var x = Math.min(Math.max(startLeft + dx, 3), maxX())
+    handle.style.left = x + 'px'
+    fill.style.width = (x + handle.offsetWidth) + 'px'
+    movePiece(x / maxX())
+  })
+  handle.addEventListener('pointerup', function() {
+    if (!dragging) return
+    dragging = false
+    var x = handle.offsetLeft
+    if (x >= maxX() - 4) {
+      handle.style.left = maxX() + 'px'
+      fill.style.width = '100%'
+      track.classList.add('done')
+      if (image) image.classList.add('done')
+      movePiece(1)
+      label.textContent = '验证通过'
+      if (btn) btn.classList.remove('disabled')
+    } else {
+      handle.style.left = '3px'
+      fill.style.width = '0'
+      movePiece(0)
+    }
+  })
+}
+function resetCaptcha(track) {
+  if (!track) return
+  var handle = track.querySelector('.captcha-handle')
+  var fill = track.querySelector('.captcha-fill')
+  var label = track.querySelector('.captcha-track-label')
+  var piece = document.getElementById(track.getAttribute('data-piece'))
+  var image = piece ? piece.closest('.captcha-image') : null
+  var pieceStart = parseFloat(track.getAttribute('data-piece-start')) || 0
+  var btn = document.getElementById(track.getAttribute('data-btn'))
+  track.classList.remove('done')
+  if (image) image.classList.remove('done')
+  handle.style.left = '3px'
+  fill.style.width = '0'
+  label.textContent = '拖动滑块完成拼图'
+  if (piece) piece.style.left = pieceStart + 'px'
+  if (btn) btn.classList.add('disabled')
+}
+document.querySelectorAll('.captcha-track').forEach(initCaptcha)
+
+/* ---------- OTP box auto-advance ---------- */
+document.querySelectorAll('.otp-row').forEach(function(row) {
+  var boxes = row.querySelectorAll('.otp-box')
+  boxes.forEach(function(box, i) {
+    box.addEventListener('input', function() {
+      box.value = box.value.replace(/[^0-9]/g, '').slice(0, 1)
+      if (box.value && boxes[i + 1]) boxes[i + 1].focus()
+    })
+    box.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !box.value && boxes[i - 1]) boxes[i - 1].focus()
+    })
+    box.addEventListener('paste', function(e) {
+      e.preventDefault()
+      fillOTP(boxes, (e.clipboardData || window.clipboardData).getData('text'))
+    })
+  })
+})
+
+function hidePwdReveal(el) {
+  var block = el.closest('main').querySelector('.pwd-reveal')
+  if (block) block.style.display = 'none'
+}
+function fillOTP(boxes, text) {
+  var digits = (text || '').replace(/[^0-9]/g, '').slice(0, boxes.length)
+  boxes.forEach(function(box, i) { box.value = digits[i] || '' })
+  var last = boxes[Math.min(digits.length, boxes.length) - 1] || boxes[0]
+  if (last) last.focus()
+}
+function pasteOTP(el) {
+  var boxes = el.closest('.field').querySelectorAll('.otp-box')
+  if (navigator.clipboard && navigator.clipboard.readText) {
+    navigator.clipboard.readText().then(function(text) {
+      fillOTP(boxes, text)
+    }).catch(function() {
+      fillOTP(boxes, '482913')
+    })
+  } else {
+    fillOTP(boxes, '482913')
+  }
+}
+</script>
+</body>
+</html>
