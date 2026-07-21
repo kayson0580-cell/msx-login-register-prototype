@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MSX 原型目录</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-en: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-cn: 'PingFang SC', 'Noto Sans SC', 'Hiragino Sans GB', sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+
+    --bg: #ffffff;
+    --surface: #f5f5f6;
+    --surface-2: #ececee;
+    --surface-hover: #e5e5e8;
+    --border: rgba(9,9,11,.09);
+    --border-strong: rgba(9,9,11,.16);
+    --border-focus: rgba(9,9,11,.55);
+
+    --text: #0a0a0b;
+    --text-secondary: rgba(9,9,11,.58);
+    --text-muted: rgba(9,9,11,.34);
+    --text-faint: rgba(9,9,11,.16);
+
+    --accent: #0a0a0b;
+    --accent-text: #ffffff;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    font-family: var(--font-en); color: var(--text); background: var(--bg);
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .cn { font-family: var(--font-cn); }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(9,9,11,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(9,9,11,.035) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+
+  .hero { position: relative; z-index: 1; padding: 88px 24px 24px; text-align: center; }
+  .hero .eyebrow {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: var(--font-cn); font-size: 32px; font-weight: 700;
+    letter-spacing: -.5px; color: var(--text); margin-bottom: 10px;
+  }
+  .hero p { font-size: 14px; color: var(--text-secondary); }
+  .hero .rule { width: 40px; height: 1px; background: var(--border-strong); margin: 28px auto 0; }
+
+  .grid {
+    position: relative; z-index: 1; max-width: 960px; margin: 40px auto 100px;
+    padding: 0 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px 24px; transition: all .18s ease;
+  }
+  .card:hover {
+    background: var(--surface-hover); border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+  .card .num { font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); font-weight: 500; margin-bottom: 16px; }
+  .card h2 { font-family: var(--font-cn); font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+  .card .go {
+    font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+    color: var(--text); display: flex; align-items: center; gap: 6px;
+  }
+  .card .go svg { transition: transform .18s ease; }
+  .card:hover .go svg { transform: translateX(3px); }
+
+  .footer {
+    position: relative; z-index: 1; text-align: center; padding: 0 24px 60px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-faint);
+  }
+</style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <div class="hero">
+    <div class="eyebrow mono">MSX · PROTOTYPE INDEX</div>
+    <h1 class="cn">原型目录</h1>
+    <p class="cn">登录 / 注册 / 找回密码 · 极简高对比 · 白色版</p>
+    <div class="rule"></div>
+  </div>
+
+  <div class="grid">
+    <a class="card" href="登录页面原型-白色.html">
+      <div class="num">01</div>
+      <h2 class="cn">登录原型</h2>
+      <p class="cn">账号密码登录、邮箱/谷歌验证码二次验证、补充密码、钱包授权登录全流程</p>
+      <div class="go">进入原型
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+    </a>
+
+    <a class="card" href="注册页面原型-v2-白色.html">
+      <div class="num">02</div>
+      <h2 class="cn">注册原型 v2</h2>
+      <p class="cn">信息填写与校验、邀请码校验与绑卡分支、邮箱验证码与完成注册</p>
+      <div class="go">进入原型
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+    </a>
+
+    <a class="card" href="找回密码页面原型-白色.html">
+      <div class="num">03</div>
+      <h2 class="cn">找回密码原型</h2>
+      <p class="cn">提交邮箱、谷歌/邮箱验证、设置新密码全流程</p>
+      <div class="go">进入原型
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+    </a>
+  </div>
+
+  <div class="footer mono">原型截图见 ../原型截图</div>
+</body>
+</html>
