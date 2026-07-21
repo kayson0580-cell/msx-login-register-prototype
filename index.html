@@ -61,11 +61,23 @@
   .hero p { font-size: 14px; color: var(--text-secondary); }
   .hero .rule { width: 40px; height: 1px; background: var(--border-strong); margin: 28px auto 0; }
 
+  .platform-head {
+    position: relative; z-index: 1; max-width: 960px; margin: 56px auto 20px; padding: 0 28px;
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .platform-head .tag {
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); font-weight: 500;
+    border: 1px solid var(--border); border-radius: 5px; padding: 2px 8px;
+  }
+  .platform-head h3 { font-family: var(--font-cn); font-size: 15px; font-weight: 700; color: var(--text); }
+  .platform-head .line { flex: 1; height: 1px; background: var(--border); }
+
   .grid {
-    position: relative; z-index: 1; max-width: 960px; margin: 40px auto 100px;
+    position: relative; z-index: 1; max-width: 960px; margin: 0 auto 20px;
     padding: 0 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 20px;
   }
+  .grid.last { margin-bottom: 100px; }
 
   .card {
     display: block; text-decoration: none; color: inherit;
@@ -102,6 +114,11 @@
     <div class="rule"></div>
   </div>
 
+  <div class="platform-head">
+    <span class="tag">APP</span>
+    <h3 class="cn">App 端原型</h3>
+    <span class="line"></span>
+  </div>
   <div class="grid">
     <a class="card" href="登录页面原型-白色.html">
       <div class="num">01</div>
@@ -125,6 +142,40 @@
       <div class="num">03</div>
       <h2 class="cn">找回密码原型</h2>
       <p class="cn">提交邮箱、谷歌/邮箱验证、设置新密码全流程</p>
+      <div class="go">进入原型
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+    </a>
+  </div>
+
+  <div class="platform-head">
+    <span class="tag">WEB</span>
+    <h3 class="cn">Web 端原型</h3>
+    <span class="line"></span>
+  </div>
+  <div class="grid last">
+    <a class="card" href="登录页面原型-白色-Web.html">
+      <div class="num">01</div>
+      <h2 class="cn">登录原型 · Web</h2>
+      <p class="cn">同 App 版全部 20 个状态，桌面分栏布局，邮箱/钱包登录切换</p>
+      <div class="go">进入原型
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+    </a>
+
+    <a class="card" href="注册页面原型-v2-白色-Web.html">
+      <div class="num">02</div>
+      <h2 class="cn">注册原型 v2 · Web</h2>
+      <p class="cn">同 App 版全部 10 个状态，桌面分栏布局</p>
+      <div class="go">进入原型
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+    </a>
+
+    <a class="card" href="找回密码页面原型-白色-Web.html">
+      <div class="num">03</div>
+      <h2 class="cn">找回密码原型 · Web</h2>
+      <p class="cn">同 App 版全部 8 个状态，桌面分栏布局，谷歌/邮箱验证切换</p>
       <div class="go">进入原型
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </div>
